@@ -1,8 +1,18 @@
 import java.time.LocalDate;
-import medical.Patient;
+import medical.Patient; 
 
-public class App {
+
+
+
+public class App
+{
+	
     public static void main(String[] args) throws Exception {
+    	
+    	
+    	new Fenetre();
+    	
+    	
         Patient.initialiserPatients();
 
         Patient moi = new Patient("adrian", "lagasse", "9849839", LocalDate.of(2003, 3, 9));
