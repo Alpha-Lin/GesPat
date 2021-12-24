@@ -1,25 +1,32 @@
+import javax.swing.BorderFactory;
+//import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JTextArea;
-import javax.swing.SwingConstants;
+//import javax.swing.JTextArea;
 import javax.swing.JButton;
-import javax.swing.JPanel;
+//import javax.swing.JPanel;
 
 
-import java.awt.BorderLayout;
+//import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.Font;
 
-public class Fenetre extends JFrame
+public class Fenetre extends JFrame implements ActionListener
 {
+	int profession = 0;
+	
+	JButton bouton1 = new JButton("Agents d'administration");
+    JButton bouton2 = new JButton("M"+"\u00e9"+"decin"); // unicode pour l'accent sur le e
+    JButton bouton3 = new JButton("Technicien");
+	
 	public Fenetre()
 	{
-		
 		
         GridBagConstraints gbc = new GridBagConstraints(); 
         
@@ -27,10 +34,7 @@ public class Fenetre extends JFrame
         
         setTitle("GesPat");  
         
-        
-        GridBagLayout layout = new GridBagLayout();
-        
-        this.setLayout(layout);  
+         
         
         //contrainte titre
         
@@ -43,13 +47,17 @@ public class Fenetre extends JFrame
         
         titre.setForeground(new Color(8, 143, 143));
         
-        titre.setFont(new Font("Arial", Font.BOLD, 20));
+        
+        titre.setFont(new Font("Arial", Font.BOLD, 40));
+        
+        titre.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0 ,new Color(8, 143, 143)));
         
         this.add(titre, gbc);
         
         
         
         // contrainte bouton 1
+        
         gbc.gridx = 0;
         gbc.gridy = 1;
         gbc.weightx = 1;
@@ -61,11 +69,13 @@ public class Fenetre extends JFrame
         
         
         
-        Button bouton1 = new Button("Agents d'administration");
-        Button bouton2 = new Button("M"+"\u00e9"+"decin"); // unicode pour les lettres avec accents
-        Button bouton3 = new Button("Technicien");
         
-        Dimension dimensionBouton = new Dimension(40, 20);
+        
+        Dimension dimensionBouton = new Dimension(40, 40);
+        
+        bouton1.setBackground(Color.LIGHT_GRAY);
+        bouton2.setBackground(Color.LIGHT_GRAY);
+        bouton3.setBackground(Color.LIGHT_GRAY);
         
         bouton1.setPreferredSize(dimensionBouton);
         
@@ -88,9 +98,7 @@ public class Fenetre extends JFrame
         
         this.add(bouton2, gbc);  
         
-        
-        
-        
+    
         //contrainte bouton 3
         
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -105,11 +113,19 @@ public class Fenetre extends JFrame
         
         
         
+        // Action boutons
+        
+        bouton1.addActionListener(this);
+        bouton2.addActionListener(this);
+        bouton3.addActionListener(this);
         
         
         
         
-        setSize(1230, 600);  
+        
+        setSize(1230, 600);
+        this.getContentPane().setBackground(Color.WHITE);
+        this.setBackground(Color.RED);
         this.setMinimumSize(new Dimension(900, 400));
         setPreferredSize(getSize());    
         //this.pack();            je sais pas si c'est une bonne idée
@@ -117,5 +133,31 @@ public class Fenetre extends JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         
         
+	}
+	
+	
+	
+	public void actionPerformed(ActionEvent e)
+	{
+		if(e.getSource() == bouton1)
+		{
+			this.setVisible(false);
+			profession = 1;
+			new Interface(profession);
+		}
+		else if(e.getSource() == bouton2)
+		{
+			this.setVisible(false);
+			profession = 2;
+			new Interface(profession);
+		}
+		else
+		{
+			this.setVisible(false);
+			profession = 3;
+			new Interface(profession);
+			
+		}
+		
 	}
 }
