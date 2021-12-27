@@ -131,6 +131,19 @@ public class Patient {
         }
     }
 
+    // Supprime un patient de la liste
+    public static void supprimerPatient(Patient p) throws IOException
+    {
+        int index = patients.indexOf(p);
+        if(index != -1)
+        {
+            patients.remove(index);
+            List<String> patients_string = Files.readAllLines(patients_path);
+            patients_string.remove(index);
+            Files.write(patients_path, patients_string);
+        }        
+    }
+
     /*--------------------------- Accesseurs et mutateurs ---------------------------*/
 
     public String getNom()
