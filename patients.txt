@@ -1,8 +1,3 @@
-<<<<<<< HEAD
 adrian;lagasse;9849839;2003-03-09
 adrian;lagasse;9849839;2003-03-09
 billy;joe;1234567;2003-05-14
-=======
-1;adrian;lagasse;9849839;2003-03-09
-2;arian;lagasse;9849839;2003-03-09
->>>>>>> 00976a04d4ebd1de8b7a10d6adc3c66241462c7a
