@@ -12,7 +12,9 @@ import java.util.ArrayList;
 public class Patient {
     private static Path patients_path = Paths.get("patients.txt");
     private static List<Patient> patients = new ArrayList<>();
+    private static int lastId;
 
+    private int id;
     private String nom;
     private String prenom;
     private String numero_secu;
@@ -20,6 +22,16 @@ public class Patient {
 
     public Patient(String nom, String prenom, String numero_secu, LocalDate date_naissance)
     {
+        id = ++lastId;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.numero_secu = numero_secu;
+        this.date_naissance = date_naissance;
+    }
+
+    public Patient(int id, String nom, String prenom, String numero_secu, LocalDate date_naissance)
+    {
+        this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.numero_secu = numero_secu;
@@ -31,8 +43,10 @@ public class Patient {
     {
         Files.readAllLines(patients_path).forEach((String patient) -> {
             String[] patient_infos = patient.split(";");
-            patients.add(new Patient(patient_infos[0], patient_infos[1], patient_infos[2], LocalDate.parse(patient_infos[3])));
+            patients.add(new Patient(Integer.parseInt(patient_infos[0]), patient_infos[1], patient_infos[2], patient_infos[3], LocalDate.parse(patient_infos[4])));
         });
+
+        lastId = patients.get(patients.size() - 1).getId();
     }
 
     /*-------------- Recherche les patients en fonction d'un attribut --------------*/
@@ -126,12 +140,30 @@ public class Patient {
     public static void ajouterPatient(Patient p) throws IOException
     {
         if(!rechercherPatient(p)){
-            Files.write(patients_path, p.nom.concat(";").concat(p.prenom).concat(";").concat(p.numero_secu).concat(";").concat(p.date_naissance.toString()).concat("\n").getBytes(), StandardOpenOption.APPEND);
+            Files.write(patients_path, (p.id + ";".concat(p.nom).concat(";").concat(p.prenom).concat(";").concat(p.numero_secu).concat(";").concat(p.date_naissance.toString()).concat("\n")).getBytes(), StandardOpenOption.APPEND);
             patients.add(p);
         }
     }
 
+    // Supprime un patient de la liste
+    public static void supprimerPatient(Patient p) throws IOException
+    {
+        int index = patients.indexOf(p);
+        if(index != -1)
+        {
+            patients.remove(index);
+            List<String> patients_string = Files.readAllLines(patients_path);
+            patients_string.remove(index);
+            Files.write(patients_path, patients_string);
+        }        
+    }
+
     /*--------------------------- Accesseurs et mutateurs ---------------------------*/
+
+    public int getId()
+    {
+        return id;
+    }
 
     public String getNom()
     {
