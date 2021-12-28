@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.JOptionPane;
 
 
 import medical.Patient;
@@ -38,10 +39,22 @@ import java.util.StringTokenizer;
 
 public class Interface extends JFrame implements ActionListener
 {
+	public int nbLignes = nbLine("patients.txt");  
 	
+	public int nbPatients = 0;
+    
+    public String[][] patient = new String[nbPatients][5];
+    
+    public String[] header = {"id", "Prénom", "Nom", "Num. Sécu", "Date de naissance"};
+    
+    JTable tablePatient;
+    
+    boolean check = false;
+    
 	public Interface(int profession) 
 	{
 		final JFrame frame = new JFrame();
+		
 		
 		switch(profession)
 		{
@@ -56,12 +69,17 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        titre.setFont(new Font("Arial", Font.BOLD, 40));
 		        
+		        JTextField searchBarI = new JTextField(2);
 		        JTextField searchBarP = new JTextField(2); // recherche par prenom
 		        JTextField searchBarN = new JTextField(2); // recherche par nom
 		        JTextField searchBarNS = new JTextField(2); // recherche par numero de securité social
 		        JTextField searchBarDN = new JTextField(0); // recherche par date de naissance
 		        
 		        JButton bouton = new JButton("Rechercher");
+		        
+		        JButton boutonAjout = new JButton("Ajouter...");
+		        
+		        JButton boutonSupr = new JButton("Suprimmer");
 		        
 		        searchBarDN.setText("AAAA-MM-JJ");
 		        searchBarDN.setForeground(new Color(153, 153, 153));
@@ -85,7 +103,7 @@ public class Interface extends JFrame implements ActionListener
 		        );
 		        
 		        
-		        
+		        JLabel sousTitre0 = new JLabel("ID :");
 		        JLabel sousTitre1 = new JLabel("Prénom :");
 		        JLabel sousTitre2 = new JLabel("Nom :");
 		        JLabel sousTitre3 = new JLabel("Numéro de sécurité :");
@@ -101,7 +119,7 @@ public class Interface extends JFrame implements ActionListener
 		        gbc.gridy = 0;
 		        gbc.weightx = 1;
 		        gbc.weighty = 1;
-		        gbc.gridwidth = 4;
+		        gbc.gridwidth = 5;
 		        
 		        gbc.anchor = GridBagConstraints.NORTHWEST;
 		        
@@ -109,10 +127,23 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        panel.add(titre, gbc);
 		        
+		        
+		        // Sous titre id
+		        
+		        gbc.gridx = 0;
+		        gbc.gridy = 1;
+		        gbc.weightx = 1;
+		        gbc.insets = new Insets(0, 35, 0, 0);
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		        panel.add(sousTitre0, gbc);
+		        
+		        
+		        
 		        gbc.gridwidth = 1;
 		        // Sous titre prenom
 		        
-		        gbc.gridx = 0;
+		        gbc.gridx = 1;
 		        gbc.gridy = 1;
 		        gbc.weightx = 1;
 		        gbc.insets = new Insets(0, 35, 0, 0);
@@ -121,7 +152,7 @@ public class Interface extends JFrame implements ActionListener
 		        panel.add(sousTitre1, gbc);
 		        
 		        // sous titre nom
-		        gbc.gridx = 1;
+		        gbc.gridx = 2;
 		        gbc.gridy = 1;
 		        gbc.weightx = 1;
 		        gbc.insets = new Insets(0, 35, 0, 0);
@@ -129,7 +160,7 @@ public class Interface extends JFrame implements ActionListener
 		        panel.add(sousTitre2, gbc);
 		        
 		        // sous titre numero
-		        gbc.gridx = 2;
+		        gbc.gridx = 3;
 		        gbc.gridy = 1;
 		        gbc.weightx = 1;
 		        gbc.insets = new Insets(0, 70, 0, 0);
@@ -138,7 +169,7 @@ public class Interface extends JFrame implements ActionListener
 		        panel.add(sousTitre3, gbc);
 		        
 		        //sous titre date
-		        gbc.gridx = 3;
+		        gbc.gridx = 4;
 		        gbc.gridy = 1;
 		        gbc.weightx = 1;
 		        gbc.anchor = GridBagConstraints.LINE_START;
@@ -146,11 +177,24 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        panel.add(sousTitre4, gbc);
 		        
-		        // Search Bar Prenom 
+		        
+		        // Search Bar id
 		        
 		        gbc.fill = GridBagConstraints.HORIZONTAL;
 		        gbc.insets = new Insets(0, 30, 0, 30);
 		        gbc.gridx = 0;
+		        gbc.gridy = 2;
+		        gbc.weightx = 1;
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		       
+		        panel.add(searchBarI, gbc);
+		        
+		        // Search Bar Prenom 
+		        
+		        gbc.fill = GridBagConstraints.HORIZONTAL;
+		        gbc.insets = new Insets(0, 30, 0, 30);
+		        gbc.gridx = 1;
 		        gbc.gridy = 2;
 		        gbc.weightx = 1;
 		        gbc.anchor = GridBagConstraints.LINE_START;
@@ -162,7 +206,7 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        gbc.fill = GridBagConstraints.HORIZONTAL;
 		        gbc.insets = new Insets(0, 30, 0, 30);
-		        gbc.gridx = 1;
+		        gbc.gridx = 2;
 		        gbc.gridy = 2;
 		        gbc.weightx = 1;
 		        gbc.anchor = GridBagConstraints.LINE_START;
@@ -174,7 +218,7 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        gbc.fill = GridBagConstraints.HORIZONTAL;
 		        gbc.insets = new Insets(0, 70, 0, 70);
-		        gbc.gridx = 2;
+		        gbc.gridx = 3;
 		        gbc.gridy = 2;
 		        gbc.weightx = 1;
 		        gbc.anchor = GridBagConstraints.LINE_START;
@@ -185,7 +229,7 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        gbc.fill = GridBagConstraints.HORIZONTAL;
 		        gbc.insets = new Insets(0, 70, 0, 70);
-		        gbc.gridx = 3;
+		        gbc.gridx = 4;
 		        gbc.gridy = 2;
 		        gbc.weightx = 1;
 		        gbc.anchor = GridBagConstraints.LINE_START;
@@ -195,11 +239,11 @@ public class Interface extends JFrame implements ActionListener
 		        // bouton
 		        
 		        GridBagConstraints gbc2 = new GridBagConstraints();
-		        gbc2.gridx = 2;
+		        gbc2.gridx = 0;
 		        gbc2.gridy = 3;
 		        gbc2.weightx = 0;
-		        gbc2.insets = new Insets(0, 40, 0, 0);
-		        gbc2.anchor = GridBagConstraints.WEST;
+		        gbc2.gridwidth = 5;
+		        gbc2.anchor = GridBagConstraints.CENTER;
 		        
 		        panel.add(bouton, gbc2);
 		        
@@ -209,17 +253,34 @@ public class Interface extends JFrame implements ActionListener
 		        gbc.gridx = 0;
 		        gbc.gridy = 4;
 		        gbc.weightx = 1;
-		        gbc.gridwidth = 4;
+		        gbc.gridwidth = 5;
 		        gbc.insets = new Insets(0, 0, 0, 0);
 		        gbc.anchor = GridBagConstraints.LINE_START;
 		        
-		        int nbLignes = nbLine("patients.txt");  
 		        
-		        System.out.println(nbLignes);
+		        // bouton ajout
 		        
-		        String[][] patient = new String[nbLignes][4];
+		        gbc2.gridx = 1;
+		        gbc2.gridy = 5;
+		        gbc2.weightx = 0;
+		        gbc2.gridwidth = 1;
+		        gbc2.insets = new Insets(0, 0, 10, 0);
+		        gbc2.anchor = GridBagConstraints.CENTER;
 		        
-		        String[] header = {"Prénom", "Nom", "Num. Sécu", "Date de naissance"};
+		        panel.add(boutonAjout, gbc2);
+		        
+		        // bouton supression
+		        
+		        gbc2.gridx = 3;
+		        gbc2.gridy = 5;
+		        gbc2.weightx = 0;
+		        gbc2.gridwidth = 2;
+		        gbc2.insets = new Insets(0, 0, 10, 0);
+		        gbc2.anchor = GridBagConstraints.CENTER;
+		        
+		        panel.add(boutonSupr, gbc2);
+		        
+		        
 		        
 		        
 		        
@@ -228,52 +289,90 @@ public class Interface extends JFrame implements ActionListener
 		        			@Override
 							public void actionPerformed(ActionEvent e) 
 							{
+		        				
+		        				
+		        				String id = searchBarI.getText();
 								String prenom = searchBarP.getText();
 								String nom = searchBarN.getText();
 								String numSecu = searchBarNS.getText();
 								String dateNaissance = searchBarDN.getText();
 								
-								System.out.println(dateNaissance);
 								
-								Patient test = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
 								
-								if(Patient.rechercherPatient(test))
+						        boolean checkId = searchBarI.getText().equals("");
+						        boolean checkPrenom = searchBarP.getText().equals("");
+						        boolean checkNom = searchBarN.getText().equals("");
+						        boolean checkNS = searchBarNS.getText().equals("");
+						        boolean checkDN = searchBarDN.getText().equals("AAAA-MM-JJ");
+						        
+						        if(checkId || checkPrenom || checkNom || checkNS || checkDN)
 								{
-									Patient[] listePatient = Patient.rechercherPatients(test);
-									
-									int nbPatients = listePatient.length;
-								
-									for(int i = 0 ; i < nbPatients ; i++)
-									{	
-										System.out.println(i);
-										patient[i][0] = listePatient[i].getPrenom();
-										patient[i][1] = listePatient[i].getNom();
-										patient[i][2] = listePatient[i].getSecu();
-										patient[i][3] = (listePatient[i].getNaissance()).toString();
-										
-										
-								        
-								        
-									}
+						        	JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs !");
+									dispose();
+									searchBarI.setText(null);
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        	check = true;
+						        	System.out.println(check);
 								}
-								searchBarP.setText(null);
-								searchBarN.setText(null);
-								searchBarNS.setText(null);
-								searchBarDN.setText(null);
+						        else
+						        {
+						        	System.out.println(dateNaissance);
 								
+						        	Patient search = new Patient(Integer.parseInt(id), prenom, nom, numSecu, LocalDate.parse(dateNaissance));
 								
-						        
-						        
-						        
+						        	if(Patient.rechercherPatient(search))
+						        	{
+						        		Patient[] listePatient = Patient.rechercherPatients(search);
+									
+						        		nbPatients = listePatient.length;
+						        		
+						        		String[][] patients = new String[nbPatients][5];
+								
+						        		for(int i = 0 ; i < nbPatients ; i++)
+						        		{	
+						        			System.out.println(i);
+						        			patients[i][0] = Integer.toString(listePatient[i].getId());
+						        			patients[i][1] = listePatient[i].getNom();
+						        			patients[i][2] = listePatient[i].getPrenom();
+						        			patients[i][3] = listePatient[i].getSecu();
+											patients[i][4] = (listePatient[i].getNaissance()).toString();
+										
+										
+								        
+											
+						        		}
+						        		DefaultTableModel tableModel = new DefaultTableModel(patients, header);
+						        		tablePatient.setModel(tableModel);
+						        		tablePatient = new JTable(patients, header);
+						        		
+							        	panel.add(new JScrollPane(tablePatient), gbc);
+							        	frame.add(panel);
+								        frame.setVisible(true);
+						        		
+						        	}
+						        	
+						        	
+						        	searchBarI.setText(null);
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        }
+								
 								
 							}
 		        			
 		        			
 		        		}
 		        
-		        );
+		        		);
 		        
-		        JTable tablePatient = new JTable(patient, header);
+		        System.out.println(check);
+		        
+		        tablePatient = new JTable(patient, header);
 		        
 		        panel.add(new JScrollPane(tablePatient), gbc);
 		        
