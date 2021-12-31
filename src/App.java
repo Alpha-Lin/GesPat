@@ -1,4 +1,6 @@
 import java.time.LocalDate;
+
+import medical.Consultation;
 import medical.Patient; 
 
 
@@ -21,6 +23,13 @@ public class App
 
         Patient.ajouterPatient(moi);
         Patient.ajouterPatient(moi);
+        
+        String[] patho = {"toux"};
+        
+        Consultation consult = new Consultation(1, "DrHouse", LocalDate.of(2021, 1, 5), patho);
+        
+        Consultation.ajouterConsultation(consult);
+        
         
     }
 }
