@@ -51,6 +51,21 @@ public class Patient {
 
     /*-------------- Recherche les patients en fonction d'un attribut --------------*/
 
+    private static List<Patient> rechercherPatientId(List<Patient> patients_prematch, int id)
+    {
+        if(id == 0)
+            return patients_prematch;
+
+        List<Patient> patients_match = new ArrayList<>();
+
+        patients_prematch.forEach((Patient p) -> {
+            if(id == p.id)
+                patients_match.add(p);
+        });
+
+        return patients_match;
+    }
+    
     private static List<Patient> rechercherPatientNom(List<Patient> patients_prematch, String nom)
     {
         if(nom == null)
@@ -123,6 +138,8 @@ public class Patient {
 
         return patients_match.toArray(new Patient[patients_match.size()]);
     }
+    
+    
 
     // Recherche si le patient est inscrit
     public static boolean rechercherPatient(Patient p_recherche)
