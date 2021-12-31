@@ -126,7 +126,7 @@ public class Fenetre extends JFrame implements ActionListener
         setSize(1230, 600);
         this.getContentPane().setBackground(Color.WHITE);
         this.setBackground(Color.RED);
-        this.setMinimumSize(new Dimension(900, 400));
+        this.setMinimumSize(new Dimension(950, 400));
         setPreferredSize(getSize());    
         //this.pack();            je sais pas si c'est une bonne idée
         setVisible(true);  

@@ -16,8 +16,11 @@ public class App
         Patient.initialiserPatients();
 
         Patient moi = new Patient("adrian", "lagasse", "9849839", LocalDate.of(2003, 3, 9));
+        
+        Patient pasMoi = new Patient("jean", "mi", "1122334", LocalDate.of(2003, 5, 14));
 
         Patient.ajouterPatient(moi);
         Patient.ajouterPatient(moi);
+        
     }
 }

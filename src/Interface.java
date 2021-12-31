@@ -1,34 +1,904 @@
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Insets;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JFrame;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+//import javax.swing.table.TableModel;
+import javax.swing.JOptionPane;
 
 
-public class Interface extends JFrame
+import medical.Patient;
+
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.util.StringTokenizer;
+
+//import java.util.ArrayList;
+//import java.util.List;
+//import java.util.StringTokenizer;
+
+
+public class Interface extends JFrame implements ActionListener
 {
+	public int nbLignes = nbLine("patients.txt");  
+	
+	public int nbPatients = 0;
+    
+    public String[][] patient = new String[nbPatients][4];
+    
+    public String[] header = {"Pr"+"\u00e9"+"nom", "Nom", "Num. S"+"\u00e9"+"cu.", "Date de naissance"};
+    
+    JTable tablePatient;
+    
+    boolean check = false;
+    
+    boolean check2 = false;
+    
+    int id;
+    String prenom;
+	String nom;
+	String numSecu;
+	String dateNaissance;
+    
+	int row = 0; 
+	
 	
 	public Interface(int profession) 
 	{
+		final JFrame frame = new JFrame();
+		
 		
 		switch(profession)
 		{
-			case 1:
+			case 1:            // L'agent d'administration
 			{
-				GridBagConstraints gbc = new GridBagConstraints(); 
+				
+		        JPanel panel = new JPanel(new GridBagLayout());
 		        
-		        this.setLayout(new GridBagLayout());  
+		        frame.setTitle("GesPat-Agent Administration");
 		        
-		        setTitle("GesPat-Agent Administration");
+		        JLabel titre = new JLabel("Interface Administration");
+		        
+		        titre.setFont(new Font("Arial", Font.BOLD, 40));
+		        
+		        //JTextField searchBarI = new JTextField(2);
+		        JTextField searchBarP = new JTextField(2); // recherche par prenom
+		        JTextField searchBarN = new JTextField(2); // recherche par nom
+		        JTextField searchBarNS = new JTextField(2); // recherche par numero de securité social
+		        JTextField searchBarDN = new JTextField(0); // recherche par date de naissance
+		        
+		        JButton bouton = new JButton("Rechercher");
+		        
+		        JButton boutonAjout = new JButton("Ajouter...");
+		        
+		        JButton boutonModif = new JButton("Modifier...");
+		        
+		        JButton boutonSupr = new JButton("Supprimmer");
+		        
+		        boutonSupr.setEnabled(false);
+		        
+		        searchBarDN.setText("AAAA-MM-JJ");
+		        searchBarDN.setForeground(new Color(153, 153, 153));
+		        
+		        
+		        searchBarDN.addFocusListener(new FocusListener()
+		        		{
+		        			@Override
+		        			public void focusGained(FocusEvent e)
+		        			{
+		        				searchBarDN.setText(null);
+		        				searchBarDN.setForeground(new Color(0, 0, 0));
+		        			}
+		        			
+		        			@Override
+		        			public void focusLost(FocusEvent e)
+		        			{
+		        				
+		        			}
+		        		}
+		        );
+		        
+		        
+		        //JLabel sousTitre0 = new JLabel("ID :");
+		        JLabel sousTitre1 = new JLabel("Pr"+"\u00e9"+"nom :");
+		        JLabel sousTitre2 = new JLabel("Nom :");
+		        JLabel sousTitre3 = new JLabel("Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" :");
+		        JLabel sousTitre4 = new JLabel("Date de naissance :");
+		        
+		        
+		        panel.setLayout(new GridBagLayout());
+		        
+		        GridBagConstraints gbc = new GridBagConstraints();
+		        
+		        gbc.fill = GridBagConstraints.HORIZONTAL;
+		        gbc.gridx = 0;
+		        gbc.gridy = 0;
+		        gbc.weightx = 1;
+		        gbc.weighty = 1;
+		        gbc.gridwidth = 4;
+		        
+		        gbc.anchor = GridBagConstraints.NORTH;
+		        
+		        titre.setHorizontalAlignment(JLabel.CENTER);
+		        
+		        panel.add(titre, gbc);
+		        
+		        /*
+		        
+		        // Sous titre id
+		        
+		        gbc.gridx = 0;
+		        gbc.gridy = 1;
+		        gbc.weightx = 1;
+		        gbc.insets = new Insets(0, 35, 0, 0);
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		        panel.add(sousTitre0, gbc);
+		        
+		        */
+		        
+		        
+		        gbc.gridwidth = 1;
+		        // Sous titre prenom
+		        
+		        gbc.gridx = 0;
+		        gbc.gridy = 1;
+		        gbc.weightx = 1;
+		        gbc.insets = new Insets(0, 35, 0, 0);
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		        panel.add(sousTitre1, gbc);
+		        
+		        // sous titre nom
+		        gbc.gridx = 1;
+		        gbc.gridy = 1;
+		        gbc.weightx = 1;
+		        gbc.insets = new Insets(0, 35, 0, 0);
+		        gbc.anchor = GridBagConstraints.LINE_START;        
+		        panel.add(sousTitre2, gbc);
+		        
+		        // sous titre numero
+		        gbc.gridx = 2;
+		        gbc.gridy = 1;
+		        gbc.weightx = 1;
+		        gbc.insets = new Insets(0, 70, 0, 0);
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		        panel.add(sousTitre3, gbc);
+		        
+		        //sous titre date
+		        gbc.gridx = 3;
+		        gbc.gridy = 1;
+		        gbc.weightx = 1;
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		        
+		        panel.add(sousTitre4, gbc);
+		        
+		        /*
+		        
+		        // Search Bar id
+		        
+		        gbc.fill = GridBagConstraints.HORIZONTAL;
+		        gbc.insets = new Insets(0, 30, 0, 30);
+		        gbc.gridx = 0;
+		        gbc.gridy = 2;
+		        gbc.weightx = 1;
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		       
+		       
+		        panel.add(searchBarI, gbc);
+		        
+		        */
+		        
+		        // Search Bar Prenom 
+		        
+		        gbc.fill = GridBagConstraints.HORIZONTAL;
+		        gbc.insets = new Insets(0, 30, 0, 30);
+		        gbc.gridx = 0;
+		        gbc.gridy = 2;
+		        gbc.weightx = 1;
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		       
+		        panel.add(searchBarP, gbc);
+		        
+		        // Search Bar Nom 
+		        
+		        gbc.fill = GridBagConstraints.HORIZONTAL;
+		        gbc.insets = new Insets(0, 30, 0, 30);
+		        gbc.gridx = 1;
+		        gbc.gridy = 2;
+		        gbc.weightx = 1;
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		        
+		        panel.add(searchBarN, gbc);
+		        
+		        // Search Bar Numero de securité social
+		        
+		        gbc.fill = GridBagConstraints.HORIZONTAL;
+		        gbc.insets = new Insets(0, 70, 0, 70);
+		        gbc.gridx = 2;
+		        gbc.gridy = 2;
+		        gbc.weightx = 1;
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		        panel.add(searchBarNS, gbc);
+		        
+		        // Search Bar date de naissance
+		        
+		        gbc.fill = GridBagConstraints.HORIZONTAL;
+		        gbc.insets = new Insets(0, 70, 0, 70);
+		        gbc.gridx = 3;
+		        gbc.gridy = 2;
+		        gbc.weightx = 1;
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		        panel.add(searchBarDN, gbc);
+		        
+		        // bouton
+		        
+		        GridBagConstraints gbc2 = new GridBagConstraints();
+		        gbc2.gridx = 0;
+		        gbc2.gridy = 3;
+		        gbc2.weightx = 0;
+		        gbc2.gridwidth = 5;
+		        gbc2.anchor = GridBagConstraints.CENTER;
+		        
+		        panel.add(bouton, gbc2);
+		        
+		        
+		        // tableau
+		        
+		        gbc.gridx = 0;
+		        gbc.gridy = 4;
+		        gbc.weightx = 1;
+		        gbc.gridwidth = 4;
+		        gbc.insets = new Insets(0, 0, 0, 0);
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		        
+		        // bouton ajout
+		        
+		        gbc2.gridx = 1;
+		        gbc2.gridy = 5;
+		        gbc2.weightx = 0;
+		        gbc2.gridwidth = 1;
+		        gbc2.insets = new Insets(0, 0, 10, 0);
+		        gbc2.anchor = GridBagConstraints.CENTER;
+		        
+		        panel.add(boutonAjout, gbc2);
+		        
+		        // bouton modification
+		        
+		        gbc2.gridx = 0;
+		        gbc2.gridy = 5;
+		        gbc2.weightx = 0;
+		        gbc2.gridwidth = 4;
+		        gbc2.insets = new Insets(0, 0, 10, 0);
+		        gbc2.anchor = GridBagConstraints.CENTER;
+		        
+		        panel.add(boutonModif, gbc2);
+		        
+		        // bouton supression
+		        
+		        gbc2.gridx = 2;
+		        gbc2.gridy = 5;
+		        gbc2.weightx = 0;
+		        gbc2.gridwidth = 2;
+		        gbc2.insets = new Insets(0, 0, 10, 0);
+		        gbc2.anchor = GridBagConstraints.CENTER;
+		        
+		        panel.add(boutonSupr, gbc2);
+		        
+		       
+		       
+		        
+		        
+		        bouton.addActionListener(new ActionListener()
+		        		{
+		        			@Override
+							public void actionPerformed(ActionEvent e) 
+							{
+		        				
+		        				
+		        				
+								prenom = searchBarP.getText();
+								nom = searchBarN.getText();
+								numSecu = searchBarNS.getText();
+								dateNaissance = searchBarDN.getText();
+								
+								
+								
+						        //boolean checkId = searchBarI.getText().equals("");
+						        boolean checkPrenom = searchBarP.getText().equals("");
+						        boolean checkNom = searchBarN.getText().equals("");
+						        boolean checkNS = searchBarNS.getText().equals("");
+						        boolean checkDN = searchBarDN.getText().equals("AAAA-MM-JJ");
+						      
+						        
+						        if(prenom.matches(".*\\d.*") || nom.matches(".*\\d.*"))
+						        {
+						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des lettre pour les champs suivants :"+"\n"
+									        +"Pr"+"\u00e9"+"nom, Nom !");
+						        	dispose();
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        }
+						        
+						        if(numSecu.matches("[a-zA-Z]+"))
+						        {
+						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
+									        +"Numéro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
+						        	dispose();
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        }
+						        
+						        try
+						        {
+						        	LocalDate.parse(dateNaissance);
+						        }
+						        catch(DateTimeParseException error)
+						        {
+						        	check = true;
+						        	
+						        	/* dispose() ne marche pas ici
+						        	 
+						        	JOptionPane.showMessageDialog(null, "Veuillez utilisez le format indiqué : AAAA-MM-JJ !");
+						        	dateNaissance = "";
+						        	dispose();
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        	
+						        	*/
+						        }
+						        
+						        
+						        
+						        if(checkPrenom || checkNom || checkNS || checkDN)
+								{
+						        	JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs !");
+									dispose();
+									//searchBarI.setText(null);
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+								}
+						        else if(dateNaissance.matches("[a-zA-Z]+"))
+						        {
+						        	JOptionPane.showMessageDialog(null, "Veuillez utilisez le format indiqu"+"\u00e9"+" : AAAA-MM-JJ !");
+						        	dispose();
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        }
+						        else if(check)
+						        {
+						        	JOptionPane.showMessageDialog(null, "Veuillez utilisez le format indiqu"+"\u00e9"+" : AAAA-MM-JJ !");
+						        	dateNaissance = "";
+						        	dispose();
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        }
+						        else
+						        {
+						        	/*Patient search = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
+						        	
+						        	
+						        	
+						        	if(Patient.rechercherPatient(search))
+						        	{
+						        		Patient[] listePatient = Patient.rechercherPatients(search);
+									
+						        		nbPatients = listePatient.length;
+						        	}
+						        	
+						        	
+						        	try
+						    		{
+						    			FileInputStream file = new FileInputStream("patients.txt");
+						            	
+						            	BufferedReader br = new BufferedReader(new InputStreamReader(file));
+						            	
+						            	String[][] patients = new String[nbPatients][5];
+						            	
+						            	
+						            	
+						            	String[] ligne = br.readLine().split(";");
+						            	
+						            	
+						            	
+						            	
+						            	
+						            	while(ligne[1] != prenom)
+						            	{
+						            		if(br.read() != -1)
+						            		{
+						            			ligne =  br.readLine().split(";");
+						            		}
+						            		else
+						            		{
+						            			break;
+						            		}
+						            	}
+						            		for(int i = 0 ; i < nbPatients ; i++)
+						            		{
+						            		
+						            			id[i] = Integer.parseInt(ligne[0]);
+						            			patients[i][0] = ligne[1];
+						            			patients[i][1] = ligne[2];
+						            			patients[i][2] = ligne[3];
+						            			patients[i][3] = ligne[4];
+						            			if(br.read() != -1)
+						            			{
+						            				ligne =  br.readLine().split(";");
+						            			}
+						            			System.out.println(id[i]);
+						            		}
+						            		
+						            		
+						            	
+						            	
+						            	
+						            	br.close();
+						            	file.close();
+						            	
+						        		DefaultTableModel tableModel = new DefaultTableModel(patients, header);
+						        		tablePatient.setModel(tableModel);
+						        		tablePatient = new JTable(patients, header);
+						        		
+							        	panel.add(new JScrollPane(tablePatient), gbc);
+							        	frame.add(panel);
+								        frame.setVisible(true);
+						            	
+						    		}
+						    		catch(Exception error)
+						    		{
+						    			error.printStackTrace();
+						    		}
+						        	*/
+						        		
+						        	Patient search = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
+						        	
+						        	
+						        	
+						        	if(Patient.rechercherPatient(search))
+						        	{
+						        		id = search.getId();
+						        		
+						        		System.out.println(id);
+						        		
+						        		Patient[] listePatient = Patient.rechercherPatients(search);
+									
+						        		nbPatients = listePatient.length;
+						        		
+						        		String[][] patients = new String[nbPatients][5];
+								
+						        		for(int i = 0 ; i < nbPatients ; i++)
+						        		{	
+						        			
+						        			patients[i][0] = listePatient[i].getNom();
+						        			patients[i][1] = listePatient[i].getPrenom();
+						        			patients[i][2] = listePatient[i].getSecu();
+											patients[i][3] = (listePatient[i].getNaissance()).toString();
+						        		}
+						        		DefaultTableModel tableModel = new DefaultTableModel(patients, header);
+						        		tablePatient.setModel(tableModel);
+						        		tablePatient = new JTable(patients, header);
+						        		
+							        	panel.add(new JScrollPane(tablePatient), gbc);
+							        	frame.add(panel);
+								        frame.setVisible(true);
+						        		
+						        	}
+						        	
+						        	
+						        	//searchBarI.setText(null);
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        }
+								
+								
+							}
+		        			
+		        			
+		        		}
+		        
+		        	);
+		        
+		        
+		        tablePatient = new JTable(patient, header);
+		        
+		        panel.add(new JScrollPane(tablePatient), gbc);
+		        
+		        
+		        // supprimer un patient
+		        
+		        
+		        tablePatient.addMouseListener(new MouseAdapter()
+		        		{
+		        			public void mousePressed(MouseEvent e)
+		        			{
+		        				Point p = e.getPoint();
+		        				row = tablePatient.rowAtPoint(p);
+		        				System.out.println(id);
+		        			}
+		        		}
+		        );
+		        
+		        tablePatient.addFocusListener(new FocusListener()
+		        		{
+		        			@Override
+		        			public void focusGained(FocusEvent e)
+		        			{
+		        				boutonSupr.setEnabled(true);
+		        			}
+		        			
+		        			public void focusLost(FocusEvent e)
+		        			{
+		        				
+		        			}
+		        		});
+		      
+		        boutonAjout.addActionListener(new ActionListener()
+		        		{
+		        			public void actionPerformed(ActionEvent e)
+		        			{
+		        				JFrame fen = new JFrame();
+		        				
+		        				fen.setLayout(new GridBagLayout());
+		        				
+		        				GridBagConstraints gbc = new GridBagConstraints();
+		        				
+		        				JLabel titre = new JLabel("Nouveau patient :");
+		        				
+		        				JLabel sousTitre1 = new JLabel("Pr"+"\u00e9"+"nom : ");
+		        				
+		        				JLabel sousTitre2 = new JLabel("Nom :");
+		        				
+		        				JLabel sousTitre3 = new JLabel("Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale :");
+		        				
+		        				JLabel sousTitre4 = new JLabel("Date de naissance :");
+		        				
+		        				JTextField fieldPrenom = new JTextField(10);
+		        				
+		        				JTextField fieldNom = new JTextField(10);
+		        				
+		        				JTextField fieldNumSecu = new JTextField(10);
+		        				
+		        				JTextField fieldDateNaissance = new JTextField(10);
+		        				
+		        				JButton validation = new JButton("Valider");
+		        				
+		        				fieldDateNaissance.setText("AAAA-MM-JJ");
+		        				fieldDateNaissance.setForeground(new Color(153, 153, 153));
+		        				
+		        				fieldDateNaissance.addFocusListener(new FocusListener()
+		 		        		{
+		 		        			@Override
+		 		        			public void focusGained(FocusEvent e)
+		 		        			{
+		 		        				fieldDateNaissance.setText(null);
+		 		        				fieldDateNaissance.setForeground(new Color(0, 0, 0));
+		 		        			}
+		 		        			
+		 		        			@Override
+		 		        			public void focusLost(FocusEvent e)
+		 		        			{
+		 		        				
+		 		        			}
+		 		        		}
+		        				);
+		        				
+		        				// titre
+		        				
+		        				
+		        				gbc.anchor = GridBagConstraints.NORTH;
+		        				gbc.gridx = 0;
+		        				gbc.gridy = 0;
+		        				gbc.gridwidth = 2;
+		        				gbc.weightx = 1;
+		        				gbc.weighty = 1;
+		        				gbc.insets = new Insets(0, 100, 0, 0);
+		        				titre.setAlignmentX(JLabel.CENTER);
+		        				
+		        				fen.add(titre, gbc);
+		        				
+		        				// label
+		        				
+		        				gbc.anchor = GridBagConstraints.WEST;
+		        				gbc.gridx = 0;
+		        				gbc.gridy = 1;
+		        				gbc.weightx = 0;
+		        				gbc.weighty = 0;
+		        				gbc.gridwidth = 1;
+		        				gbc.insets = new Insets(0, 10, 10, 0);
+		        				
+		        				fen.add(sousTitre1, gbc);
+		        				
+		        				gbc.anchor = GridBagConstraints.WEST;
+		        				gbc.gridx = 0;
+		        				gbc.gridy = 2;
+		        				gbc.weightx = 0;
+		        				gbc.weighty = 0;
+		        				gbc.gridwidth = 1;
+		        				gbc.insets = new Insets(0, 10, 10, 0);
+		        				
+		        				fen.add(sousTitre2, gbc);
+		        				
+		        				gbc.anchor = GridBagConstraints.WEST;
+		        				gbc.gridx = 0;
+		        				gbc.gridy = 3;
+		        				gbc.weightx = 0;
+		        				gbc.weighty = 0;
+		        				gbc.gridwidth = 1;
+		        				gbc.insets = new Insets(0, 10, 10, 0);
+		        				
+		        				fen.add(sousTitre3, gbc);
+		        				
+		        				gbc.anchor = GridBagConstraints.WEST;
+		        				gbc.gridx = 0;
+		        				gbc.gridy = 4;
+		        				gbc.weightx = 0;
+		        				gbc.weighty = 0;
+		        				gbc.gridwidth = 1;
+		        				gbc.insets = new Insets(0, 10, 10, 0);
+		        				
+		        				fen.add(sousTitre4, gbc);
+		        				
+		        				// textfield
+		        				
+		        				gbc.anchor = GridBagConstraints.EAST;
+		        				gbc.gridx = 2;
+		        				gbc.gridy = 1;
+		        				gbc.weightx = 0;
+		        				gbc.weighty = 0;
+		        				gbc.gridwidth = 1;
+		        				gbc.insets = new Insets(0, 0, 10, 10);
+		        				
+		        				fen.add(fieldPrenom, gbc);
+		        				
+		        				gbc.anchor = GridBagConstraints.EAST;
+		        				gbc.gridx = 2;
+		        				gbc.gridy = 2;
+		        				gbc.weightx = 0;
+		        				gbc.weighty = 0;
+		        				gbc.gridwidth = 1;
+		        				gbc.insets = new Insets(0, 0, 10, 10);
+		        				
+		        				fen.add(fieldNom, gbc);
+		        				
+		        				gbc.anchor = GridBagConstraints.EAST;
+		        				gbc.gridx = 2;
+		        				gbc.gridy = 3;
+		        				gbc.weightx = 0;
+		        				gbc.weighty = 0;
+		        				gbc.gridwidth = 1;
+		        				gbc.insets = new Insets(0, 0, 10, 10);
+		        				
+		        				fen.add(fieldNumSecu, gbc);
+		        				
+		        				gbc.anchor = GridBagConstraints.EAST;
+		        				gbc.gridx = 2;
+		        				gbc.gridy = 4;
+		        				gbc.weightx = 0;
+		        				gbc.weighty = 0;
+		        				gbc.gridwidth = 1;
+		        				gbc.insets = new Insets(0, 0, 10, 10);
+		        				
+		        				fen.add(fieldDateNaissance, gbc);
+		        				
+		        				// bouton
+		        				
+		        				gbc.anchor = GridBagConstraints.SOUTH;
+		        				gbc.gridx = 0;
+		        				gbc.gridy = 5;
+		        				gbc.weightx = 0;
+		        				gbc.weighty = 0;
+		        				gbc.gridwidth = 2;
+		        				gbc.insets = new Insets(0, 100, 10, 0);
+		        				validation.setAlignmentX(JButton.CENTER);
+		        				
+		        				fen.add(validation, gbc);
+		        				
+		        				validation.addActionListener(new ActionListener()
+		        						{
+		        							public void actionPerformed(ActionEvent e)
+		        							{
+		        								String prenom = fieldPrenom.getText();
+		        		        				String nom = fieldNom.getText();
+		        		        				String numSecu = fieldNumSecu.getText();
+		        		        				String dateNaissance = fieldDateNaissance.getText();
+		        		        				
+		        		        				Patient nouvPatient = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
+		        		        				try
+		        		        				{
+		        		        					Patient.ajouterPatient(nouvPatient);
+		        		        				}
+		        		        				catch(IOException error)
+		        		        				{
+		        		        					
+		        		        				}
+		        		        				
+		        		        				fen.setVisible(false);
+		        		        				JOptionPane.showMessageDialog(null, "Nouveau patient ajout"+"\u00e9"+" !");
+		        		        				fen.dispose();
+		        							}
+		        						}
+		        				);
+		        				
+		        				
+		        				
+		        				fen.setVisible(true);
+		        				fen.setSize(400, 200);
+		        				fen.setPreferredSize(getSize());
+		        				fen.setMinimumSize(new Dimension(500, 300));
+		        				fen.setMaximumSize(new Dimension(600, 300));
+		        			}
+		        		}
+		        );
+		        
+		        boutonSupr.addActionListener(new ActionListener()
+		        		{
+		        			
+		        			
+		        			public void actionPerformed(ActionEvent e)
+		        			{
+		        				boutonSupr.setEnabled(false);
+		        				System.out.println(row);
+		        				if(row > -1)
+		        		        {
+		        					
+		        		        	prenom = tablePatient.getModel().getValueAt(row, 0).toString();
+		        		        	nom = tablePatient.getModel().getValueAt(row, 1).toString();
+		        		        	numSecu = tablePatient.getModel().getValueAt(row, 2).toString();
+		        		        	dateNaissance = tablePatient.getModel().getValueAt(row, 3).toString();
+		        		        	
+		        		        	Patient aSupprimer = new Patient(nom, prenom, numSecu, LocalDate.parse(dateNaissance));
+		        		        	
+		        		        	try
+		        		        	{
+		        		        		Patient.supprimerPatient(aSupprimer);
+		        		        		System.out.println("ok");
+		        		        	}
+		        		        	catch(IOException error)
+		        		        	{
+		        		        		
+		        		        	}
+		        		        	
+		        		        	
+		        		        	
+		        		        	
+						        	
+						        	//Patient search = new Patient(Integer.parseInt(id), prenom, nom, numSecu, LocalDate.parse(dateNaissance));
+								
+						        	if(Patient.rechercherPatient(aSupprimer))
+						        	{
+						        		System.out.println("ok");
+						        		Patient[] listePatient = Patient.rechercherPatients(aSupprimer);
+									
+						        		nbPatients = listePatient.length;
+						        		
+						        		String[][] patients = new String[nbPatients][5];
+								
+						        		for(int i = 0 ; i < nbPatients ; i++)
+						        		{	
+						        			patients[i][0] = listePatient[i].getNom();
+						        			patients[i][1] = listePatient[i].getPrenom();
+						        			patients[i][2] = listePatient[i].getSecu();
+											patients[i][3] = (listePatient[i].getNaissance()).toString();
+										
+										
+								        
+											
+						        		}
+						        		DefaultTableModel tableModel = new DefaultTableModel(patients, header);
+						        		tablePatient.setModel(tableModel);
+						        		tablePatient = new JTable(patients, header);
+						        		
+							        	panel.add(new JScrollPane(tablePatient), gbc);
+							        	frame.add(panel);
+								        frame.setVisible(true);
+						        		
+						        	}
+						        	else
+						        	{
+						        		System.out.println("oki");
+						        		Patient[] listePatient = Patient.rechercherPatients(aSupprimer);
+										
+						        		nbPatients = listePatient.length;
+						        		
+						        		String[][] patients = new String[nbPatients][5];
+								
+						        		for(int i = 0 ; i < nbPatients ; i++)
+						        		{	
+						        			patients[i][0] = listePatient[i].getNom();
+						        			patients[i][1] = listePatient[i].getPrenom();
+						        			patients[i][2] = listePatient[i].getSecu();
+											patients[i][3] = (listePatient[i].getNaissance()).toString();
+										
+										
+								        
+											
+						        		}
+						        		DefaultTableModel tableModel = new DefaultTableModel(patients, header);
+						        		tablePatient.setModel(tableModel);
+						        		tablePatient = new JTable(patients, header);
+						        		
+							        	panel.add(new JScrollPane(tablePatient), gbc);
+							        	frame.add(panel);
+								        frame.setVisible(true);
+						        	}
+						        	
+						        	
+						        	//searchBarI.setText(null);
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+		        		        	
+		        		        	
+		        		        }
+		        			}
+
+		        		}
+		        	);
+		        
+		        
+		        
+		       
+		       
 		        
 		        
 		        
 		        
+		        frame.add(panel);
+		        frame.setVisible(true);  
+		        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		        
-		        setVisible(true);  
-		        setDefaultCloseOperation(EXIT_ON_CLOSE);
+		        break;
 			}
 			
-			case 2:
+			case 2:             // Le médecin
 			{
 				GridBagConstraints gbc = new GridBagConstraints(); 
 		        
@@ -41,9 +911,10 @@ public class Interface extends JFrame
 		        
 		        setVisible(true);  
 		        setDefaultCloseOperation(EXIT_ON_CLOSE);
+		        break;
 			}
 			
-			case 3:
+			case 3:            // Le technicien
 			{
 				GridBagConstraints gbc = new GridBagConstraints(); 
 		        
@@ -57,11 +928,47 @@ public class Interface extends JFrame
 		        
 		        setVisible(true);  
 		        setDefaultCloseOperation(EXIT_ON_CLOSE);
+		        break;
 			}
 		}
 		
-		setSize(1500, 800);
+		frame.setSize(1500, 800);
+		frame.setPreferredSize(getSize());  
+		frame.setMinimumSize(new Dimension(1375, 800));
 		
 	}
+	
+	public static int nbLine(String fileName)
+	{
+		int lignes = 0;
+		try
+		{
+			FileInputStream file = new FileInputStream("patients.txt");
+        	
+        	BufferedReader br = new BufferedReader(new InputStreamReader(file));
+        	
+        	while(br.readLine() != null)
+        	{
+        		lignes++;
+        	}
+        	
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return lignes;
+		
+	}
+	
+	
+	public  void actionPerformed(ActionEvent e)
+	{
+		
+	}
+
+	
+	
 
 }
