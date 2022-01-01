@@ -29,7 +29,7 @@ public class Consultation {
     // Inscrit la consultation dans le fichier
     public static void ajouterConsultation(Consultation c) throws IOException
     {
-        Files.write(consultations_path, (c.id_patient + ";".concat(c.nom_medecin).concat(";").concat(c.date_consultation.toString()).concat(";").concat(pathologiesToString(c.pathologies)).concat("\n").getBytes(), StandardOpenOption.APPEND);
+        Files.write(consultations_path, (c.id_patient + ";".concat(c.nom_medecin).concat(";").concat(c.date_consultation.toString()).concat(";").concat(pathologiesToString(c.pathologies)).concat("\n")).getBytes(), StandardOpenOption.APPEND);
         consultations.add(c);
     }
 
