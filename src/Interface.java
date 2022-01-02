@@ -683,8 +683,6 @@ public class Interface extends JFrame implements ActionListener
 		        				
 		        				// bouton
 		        				
-		        				// avant push ou fetch
-		        				
 		        				gbc.anchor = GridBagConstraints.SOUTH;
 		        				gbc.gridx = 0;
 		        				gbc.gridy = 5;
