@@ -41,12 +41,16 @@ public class Patient {
     // Permet d'intialiser la liste de patients
     public static void initialiserPatients() throws IOException
     {
-        Files.readAllLines(patients_path).forEach((String patient) -> {
-            String[] patient_infos = patient.split(";");
-            patients.add(new Patient(Integer.parseInt(patient_infos[0]), patient_infos[1], patient_infos[2], patient_infos[3], LocalDate.parse(patient_infos[4])));
-        });
-
-        lastId = patients.get(patients.size() - 1).getId();
+        if(Files.exists(patients_path))
+        {
+            Files.readAllLines(patients_path).forEach((String patient) -> {
+                String[] patient_infos = patient.split(";");
+                patients.add(new Patient(Integer.parseInt(patient_infos[0]), patient_infos[1], patient_infos[2], patient_infos[3], LocalDate.parse(patient_infos[4])));
+            });
+    
+            lastId = patients.get(patients.size() - 1).getId();
+        }else
+            lastId = 1;
     }
 
     /*-------------- Recherche les patients en fonction d'un attribut --------------*/
@@ -138,8 +142,6 @@ public class Patient {
 
         return patients_match.toArray(new Patient[patients_match.size()]);
     }
-    
-    
 
     // Recherche si le patient est inscrit
     public static boolean rechercherPatient(Patient p_recherche)
@@ -155,9 +157,9 @@ public class Patient {
 
     // Inscrit le patient à condition qu'il ne le soit pas déjà
     public static void ajouterPatient(Patient p) throws IOException
-    {
+    {        
         if(!rechercherPatient(p)){
-            Files.write(patients_path, (p.id + ";".concat(p.nom).concat(";").concat(p.prenom).concat(";").concat(p.numero_secu).concat(";").concat(p.date_naissance.toString()).concat("\n")).getBytes(), StandardOpenOption.APPEND);
+            Files.write(patients_path, (p.id + ";".concat(p.nom).concat(";").concat(p.prenom).concat(";").concat(p.numero_secu).concat(";").concat(p.date_naissance.toString()).concat("\n")).getBytes(), Files.exists(patients_path) ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
             patients.add(p);
         }
     }
