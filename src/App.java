@@ -1,19 +1,14 @@
+import java.io.IOException;
 import java.time.LocalDate;
 
 import medical.Consultation;
 import medical.Patient; 
 
-
-
-
 public class App
 {
-	
-    public static void main(String[] args) throws Exception {
-    	
-    	
+    public static void main(String[] args) throws IOException {
+   	
     	new Fenetre();
-    	
     	
         Patient.initialiserPatients();
 
@@ -29,7 +24,5 @@ public class App
         Consultation consult = new Consultation(1, "DrHouse", LocalDate.of(2021, 1, 5), patho);
         
         Consultation.ajouterConsultation(consult);
-        
-        
     }
 }
