@@ -1,1 +1,4 @@
-*.class
+/.vscode
+/README.md
+consultations.txt
+patients.txt
