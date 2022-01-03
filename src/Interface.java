@@ -20,7 +20,7 @@ import javax.swing.table.TableModel;
 //import javax.swing.table.TableModel;
 import javax.swing.JOptionPane;
 
-
+import medical.Consultation;
 import medical.Patient;
 
 import javax.swing.JPanel;
@@ -62,7 +62,7 @@ public class Interface extends JFrame implements ActionListener
     
     public String[] header1 = {"Pr"+"\u00e9"+"nom", "Nom", "Num. S"+"\u00e9"+"cu.", "Date de naissance"};
     
-    public String[] header2 = {"Nom patient", "Nom m"+"\u00e9"+"decin", "Date consultation", "Pathologies", "Appareillage n"+"\u00e9"+"cessaire"};
+    public String[] header2 = {"Nom patient", "Nom m"+"\u00e9"+"decin", "Date consultation", "Appareillage n"+"\u00e9"+"cessaire", "Octroy"+"\u00e9"+" ou non"};
     
     String[] header3 = {"Prenom", "Nom", "num", "date"};
     
@@ -1156,70 +1156,6 @@ public class Interface extends JFrame implements ActionListener
 					        		tablePatient.setModel(tableModel);
 		        		        	
 					        		
-					        		
-		        		        	
-						        	/*if(Patient.rechercherPatient(aSupprimer))
-						        	{
-						        		System.out.println("ok2");
-						        		Patient[] listePatient = Patient.rechercherPatients(aSupprimer);
-									
-						        		nbPatients = listePatient.length;
-						        		
-						        		String[][] patients = new String[nbPatients][5];
-								
-						        		for(int i = 0 ; i < nbPatients ; i++)
-						        		{	
-						        			patients[i][0] = listePatient[i].getNom();
-						        			patients[i][1] = listePatient[i].getPrenom();
-						        			patients[i][2] = listePatient[i].getSecu();
-											patients[i][3] = (listePatient[i].getNaissance()).toString();
-										
-										
-								        
-											
-						        		}
-						        		tableModel = new DefaultTableModel(patients, header1);
-						        		tablePatient.setModel(tableModel);
-						        		tablePatient = new JTable(patients, header1);
-						        		
-							        	panel.add(new JScrollPane(tablePatient), gbc);
-							        	frame.add(panel);
-								        frame.setVisible(true);
-						        		
-						        	}
-						        	else
-						        	{
-						        		System.out.println("oki");
-						        		Patient[] listePatient = Patient.rechercherPatients(aSupprimer);
-										
-						        		nbPatients = listePatient.length;
-						        		
-						        		System.out.println(nbPatients);
-						        		
-						        		String[][] patients = new String[nbPatients][5];
-								
-						        		for(int i = 0 ; i < nbPatients ; i++)
-						        		{	
-						        			patients[i][0] = listePatient[i].getNom();
-						        			patients[i][1] = listePatient[i].getPrenom();
-						        			patients[i][2] = listePatient[i].getSecu();
-											patients[i][3] = (listePatient[i].getNaissance()).toString();
-										
-										
-						        		}
-						        		//tableModel = new DefaultTableModel(patients, header1);
-						        		tableModel.setRowCount(0);
-						        		tablePatient.setModel(tableModel);
-						        		
-						        		tablePatient = new JTable(patients, header1);
-						        		
-							        	panel.add(new JScrollPane(tablePatient), gbc);
-							        	frame.add(panel);
-								        frame.setVisible(true);
-						        	}*/
-						        	
-						        	
-						        	//searchBarI.setText(null);
 						        	searchBarP.setText(null);
 						        	searchBarN.setText(null);
 						        	searchBarNS.setText(null);
@@ -1271,6 +1207,7 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        JButton boutonSupr = new JButton("Supprimmer");
 		        
+		        JButton boutonInfo = new JButton("Information...");
 		        
 		        
 		        tableModel = new DefaultTableModel(miniTab, header3);
@@ -1296,6 +1233,8 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        
 		        boutonModif.setEnabled(false);
+		        
+		        boutonInfo.setEnabled(false);
 		        
 		        boutonSupr.setEnabled(false);
 		        
@@ -1485,10 +1424,10 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        // bouton ajout
 		        
-		        gbc2.gridx = 1;
+		        gbc2.gridx = 0;
 		        gbc2.gridy = 5;
 		        gbc2.weightx = 0;
-		        gbc2.gridwidth = 1;
+		        gbc2.gridwidth = 2;
 		        gbc2.insets = new Insets(0, 0, 10, 0);
 		        gbc2.anchor = GridBagConstraints.CENTER;
 		        
@@ -1496,18 +1435,29 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        // bouton modification
 		        
-		        gbc2.gridx = 0;
+		        gbc2.gridx = 1;
 		        gbc2.gridy = 5;
 		        gbc2.weightx = 0;
-		        gbc2.gridwidth = 4;
+		        gbc2.gridwidth = 2;
 		        gbc2.insets = new Insets(0, 0, 10, 0);
 		        gbc2.anchor = GridBagConstraints.CENTER;
 		        
 		        panel.add(boutonModif, gbc2);
 		        
-		        // bouton supression
+		        // bouton information patient
 		        
 		        gbc2.gridx = 2;
+		        gbc2.gridy = 5;
+		        gbc2.weightx = 0;
+		        gbc2.gridwidth = 2;
+		        gbc2.insets = new Insets(0, 0, 10, 0);
+		        gbc2.anchor = GridBagConstraints.CENTER;
+		        
+		        panel.add(boutonInfo, gbc2);
+		        
+		        // bouton supression
+		        
+		        gbc2.gridx = 3;
 		        gbc2.gridy = 5;
 		        gbc2.weightx = 0;
 		        gbc2.gridwidth = 2;
@@ -1711,18 +1661,25 @@ public class Interface extends JFrame implements ActionListener
         		        	nom = tablePatient.getModel().getValueAt(row, 1).toString();
         		        	numSecu = tablePatient.getModel().getValueAt(row, 2).toString();
         		        	dateNaissance = tablePatient.getModel().getValueAt(row, 3).toString();
+        		        	
+        		        	Patient search = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
+        		        	
+        		        	Patient[] listePatient = Patient.rechercherPatients(search);
+        		        	
+        		        	Consultation[] listeConsultation = Consultation.rechercherConsultations(listePatient[0].getId());
+        		        	
+        		        	int nbConsultation = listeConsultation.length;
+        		        	
+        		        	consultation = new String[nbConsultation][5];
         					
-        		        	consultation = new String[nbPatients][5];
-        					
-        					for(int i = 0 ; i < nbPatients ; i++)
+        					for(int i = 0 ; i < nbConsultation ; i++)
         					{
         						
         						consultation[i][0] = prenom;
-        						consultation[i][1] = "DrHouse";
-        						consultation[i][2] = "2022-02-01";
-        						consultation[i][3] = "toux";
-        						consultation[i][4] = "oui (pose pas de question)";
-        						
+        						consultation[i][1] = listeConsultation[i].getMedecin();
+        						consultation[i][2] = listeConsultation[i].getDateConsultation().toString();
+        						consultation[i][3] = listeConsultation[i].getAppareil();
+        						consultation[i][4] = listeConsultation[i].getOctroie();
         					}
         					
         					tableModelConsult = new DefaultTableModel(consultation, header2);
@@ -1753,6 +1710,7 @@ public class Interface extends JFrame implements ActionListener
 		        			{
 		        				boutonModif.setEnabled(true);
 		        				boutonSupr.setEnabled(true);
+		        				boutonInfo.setEnabled(true);
 		        			}
 		        			
 		        			public void focusLost(FocusEvent e)
@@ -2205,27 +2163,18 @@ public class Interface extends JFrame implements ActionListener
 		        				boutonSupr.setEnabled(false);
 		        				if(row > -1)
 		        		        {
-		        					System.out.println("la ligne "+rowConsult);
-		        		        	prenom = tableConsultation.getModel().getValueAt(rowConsult, 0).toString();
-		        		        	nom = tableConsultation.getModel().getValueAt(rowConsult, 1).toString();
-		        		        	numSecu = tableConsultation.getModel().getValueAt(rowConsult, 2).toString();
-		        		        	dateNaissance = tableConsultation.getModel().getValueAt(rowConsult, 3).toString();
-		        		        	
-		        		        	System.out.println(prenom+" "+nom+" "+numSecu+" "+LocalDate.parse(dateNaissance));
+		        		        	prenom = tablePatient.getModel().getValueAt(row, 0).toString();
+		        		        	nom = tablePatient.getModel().getValueAt(row, 1).toString();
+		        		        	numSecu = tablePatient.getModel().getValueAt(row, 2).toString();
+		        		        	dateNaissance = tablePatient.getModel().getValueAt(row, 3).toString();
 		        		        	
 		        		        	
-		        		        	Patient aSupprimer = new Patient("joe", "billy", "1234567", LocalDate.parse("2003-05-14"));
-		        		        	
-		        		        	System.out.println(Patient.rechercherPatient(aSupprimer));
-		        		        	
-		        		        	System.out.println("voici l'id du patient "+aSupprimer.getId());
+		        		        	Patient aSupprimer = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
 		        		        	
 		        		        	Patient[] listePatient = Patient.rechercherPatients(aSupprimer);
 		        		        	
 		        		        	
-									
 					        		nbPatients = listePatient.length;
-					        		System.out.println("patients : "+listePatient.length);
 					        		
 					        		String[][] patients = new String[nbPatients][5];
 							
@@ -2240,15 +2189,23 @@ public class Interface extends JFrame implements ActionListener
 							        
 										
 					        		}
+		        		        	try
+		        		        	{
+		        		        		Patient.supprimerPatient(listePatient[row]);
+		        		        	}
+		        		        	catch(IOException error)
+		        		        	{
+		        		        		
+		        		        	}
+		        		        	
+		        		        	tableModel.setRowCount(0);
+					        		tablePatient.setModel(tableModel);
+		        		        	
 					        		
-					        		
-		        		        
 						        	searchBarP.setText(null);
 						        	searchBarN.setText(null);
 						        	searchBarNS.setText(null);
 						        	searchBarDN.setText(null);
-		        		        	
-		        		        	
 		        		        }
 		        			}
 

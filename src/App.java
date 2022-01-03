@@ -19,10 +19,15 @@ public class App
         Patient.ajouterPatient(moi);
         Patient.ajouterPatient(moi);
         
-        String[] patho = {"toux"};
+        String[] patho = {"toux", "rhume", "artrose", "grippe", "covid"};
         
-        Consultation consult = new Consultation(1, "DrHouse", LocalDate.of(2021, 1, 5), patho);
+        Consultation.initialiserConsultation();
         
-        Consultation.ajouterConsultation(consult);
+        Consultation consult = new Consultation(6, "DrHouse", LocalDate.of(2021, 1, 5), "fauteuil roulant", patho);
+        
+        Consultation consultation = new Consultation(6, "DrHouse", LocalDate.of(2021, 5, 5), "fauteuil roulant", patho);
+        
+        //Consultation.ajouterConsultation(consultation);
+        
     }
 }
