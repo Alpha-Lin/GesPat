@@ -37,8 +37,6 @@ import java.io.InputStreamReader;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -352,129 +350,152 @@ public class Interface extends JFrame implements ActionListener
 		        			@Override
 							public void actionPerformed(ActionEvent e) 
 							{
-		        				try
-								{
+		        				
+		        				
+		        				
+								prenom = searchBarP.getText();
+								nom = searchBarN.getText();
+								numSecu = searchBarNS.getText();
+								dateNaissance = searchBarDN.getText();
 								
-		        					prenom = searchBarP.getText();
-									nom = searchBarN.getText();
-									numSecu = searchBarNS.getText();
-									dateNaissance = searchBarDN.getText();
-									
-									
-							        boolean checkPrenom = searchBarP.getText().equals("");
-							        boolean checkNom = searchBarN.getText().equals("");
-							        boolean checkNS = searchBarNS.getText().equals("");
-							        boolean checkDN = searchBarDN.getText().equals("AAAA-MM-JJ");
-							        
-							        
-							        
-							        if(checkPrenom || checkNom || checkNS || checkDN)
-									{
-							        	JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs !");
-										dispose();
-										searchBarP.setText(null);
-							        	searchBarN.setText(null);
-							        	searchBarNS.setText(null);
-							        	searchBarDN.setText("AAAA-MM-JJ");
-							        	searchBarDN.setForeground(new Color(153, 153, 153));
-									}
-							        else if(prenom.matches(".*\\d.*") || nom.matches(".*\\d.*"))
-							        {
-							        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des lettre pour les champs suivants :"+"\n"
-										        +"Pr"+"\u00e9"+"nom, Nom !");
-							        	dispose();
-							        	searchBarP.setText(null);
-							        	searchBarN.setText(null);
-							        	searchBarNS.setText(null);
-							        	searchBarDN.setText("AAAA-MM-JJ");
-							        	searchBarDN.setForeground(new Color(153, 153, 153));
-							        }
-							        else if(!(numSecu.matches("[0-9]+")))
-							        {
-							        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
-										        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
-							        	dispose();
-							        	searchBarP.setText(null);
-							        	searchBarN.setText(null);
-							        	searchBarNS.setText(null);
-							        	searchBarDN.setText("AAAA-MM-JJ");
-							        	searchBarDN.setForeground(new Color(153, 153, 153));
-							        }
-							        else
-							        {
-							        	
-							        	Patient search = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
-							        	
-							        	
-							        	
-							        	if(Patient.rechercherPatient(search))
-							        	{
-							        		
-							        		Patient[] listePatient = Patient.rechercherPatients(search);
-										
-							        		nbPatients = listePatient.length;
-							        		
-							        		String[][] patients = new String[nbPatients][5];
-							        		
-							        		id = new int[nbPatients]; 
-									
-							        		for(int i = 0 ; i < nbPatients ; i++)
-							        		{	
-							        			id[i] = listePatient[i].getId();
-							        			patients[i][0] = listePatient[i].getNom();
-							        			patients[i][1] = listePatient[i].getPrenom();
-							        			patients[i][2] = listePatient[i].getSecu();
-												patients[i][3] = (listePatient[i].getNaissance()).toString();
-							        		}
-							        		
-							        		tableModel = new DefaultTableModel(patients, header1);
-							        		tablePatient.setModel(tableModel);
-							        		
-							        		
-								        	panel.add(new JScrollPane(tablePatient), gbc);
-								        	frame.add(panel);
-									        frame.setVisible(true);
-							        		
-							        	}
-							        	else
-							        	{
-							        		JOptionPane.showMessageDialog(null, "Patient inconnu, veuillez l'ajouter ou vérifier les paramètres entrée !");
-							        	}
-							        	
-							        	searchBarP.setText(null);
-							        	searchBarN.setText(null);
-							        	searchBarNS.setText(null);
-							        	searchBarDN.setText("AAAA-MM-JJ");
-							        	searchBarDN.setForeground(new Color(153, 153, 153));
-							        }
-		        				
+								
+								
+						        //boolean checkId = searchBarI.getText().equals("");
+						        boolean checkPrenom = searchBarP.getText().equals("");
+						        boolean checkNom = searchBarN.getText().equals("");
+						        boolean checkNS = searchBarNS.getText().equals("");
+						        boolean checkDN = searchBarDN.getText().equals("AAAA-MM-JJ");
+						      
+						        
+						        if(prenom.matches(".*\\d.*") || nom.matches(".*\\d.*"))
+						        {
+						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des lettre pour les champs suivants :"+"\n"
+									        +"Pr"+"\u00e9"+"nom, Nom !");
+						        	dispose();
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        }
+						        
+						        if(numSecu.matches("[a-zA-Z]+"))
+						        {
+						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
+									        +"Numéro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
+						        	dispose();
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        }
+						        
+						        try
+						        {
+						        	LocalDate.parse(dateNaissance);
+						        }
+						        catch(DateTimeParseException error)
+						        {
+						        	check = true;
+						        	
+						        	/* dispose() ne marche pas ici
+						        	 
+						        	JOptionPane.showMessageDialog(null, "Veuillez utilisez le format indiqué : AAAA-MM-JJ !");
+						        	dateNaissance = "";
+						        	dispose();
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        	
+						        	*/
+						        }
+						        
+						        
+						        
+						        if(checkPrenom || checkNom || checkNS || checkDN)
+								{
+						        	JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs !");
+									dispose();
+									//searchBarI.setText(null);
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
 								}
-								catch(DateTimeParseException error)
-									{
-										JOptionPane.showMessageDialog(null, "Veuillez utilisez le format indiqu"+"\u00e9"+" : AAAA-MM-JJ !");
-										dateNaissance = "";
-										dispose();
-										searchBarP.setText(null);
-							        	searchBarN.setText(null);
-							        	searchBarNS.setText(null);
-							        	searchBarDN.setText("AAAA-MM-JJ");
-							        	searchBarDN.setForeground(new Color(153, 153, 153));
-									}
-								catch(NumberFormatException error)
-							        {
-							        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
-										        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
-							        	dispose();
-							        	searchBarP.setText(null);
-							        	searchBarN.setText(null);
-							        	searchBarNS.setText(null);
-							        	searchBarDN.setText("AAAA-MM-JJ");
-							        	searchBarDN.setForeground(new Color(153, 153, 153));
-							        }
-		        				
+						        else if(dateNaissance.matches("[a-zA-Z]+"))
+						        {
+						        	JOptionPane.showMessageDialog(null, "Veuillez utilisez le format indiqu"+"\u00e9"+" : AAAA-MM-JJ !");
+						        	dispose();
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        }
+						        else if(check)
+						        {
+						        	JOptionPane.showMessageDialog(null, "Veuillez utilisez le format indiqu"+"\u00e9"+" : AAAA-MM-JJ !");
+						        	dateNaissance = "";
+						        	dispose();
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        }
+						        else
+						        {
+						        	
+						        	Patient search = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
+						        	
+						        	
+						        	
+						        	if(Patient.rechercherPatient(search))
+						        	{
+						        		
+						        		Patient[] listePatient = Patient.rechercherPatients(search);
+									
+						        		nbPatients = listePatient.length;
+						        		
+						        		String[][] patients = new String[nbPatients][5];
+						        		
+						        		id = new int[nbPatients]; 
+								
+						        		for(int i = 0 ; i < nbPatients ; i++)
+						        		{	
+						        			id[i] = listePatient[i].getId();
+						        			patients[i][0] = listePatient[i].getNom();
+						        			patients[i][1] = listePatient[i].getPrenom();
+						        			patients[i][2] = listePatient[i].getSecu();
+											patients[i][3] = (listePatient[i].getNaissance()).toString();
+						        		}
+						        		
+						        		tableModel = new DefaultTableModel(patients, header1);
+						        		tablePatient.setModel(tableModel);
+						        		
+						        		
+							        	panel.add(new JScrollPane(tablePatient), gbc);
+							        	frame.add(panel);
+								        frame.setVisible(true);
+						        		
+						        	}
+						        	else
+						        	{
+						        		JOptionPane.showMessageDialog(null, "Patient inconnu, veuillez l'ajouter ou vérifier les paramètres entrée !");
+						        	}
+						        	
+						        	
+						        	searchBarP.setText(null);
+						        	searchBarN.setText(null);
+						        	searchBarNS.setText(null);
+						        	searchBarDN.setText(null);
+						        	
+						        }
+								
+								
 							}
+		        			
+		        			
 		        		}
-						     
+		        
 		        	);
 		        
 		        
@@ -680,105 +701,105 @@ public class Interface extends JFrame implements ActionListener
 		        								
 		        								try
 		        								{
-			        								String prenom = fieldPrenom.getText();
-			        		        				String nom = fieldNom.getText();
-			        		        				String numSecu = fieldNumSecu.getText();
-			        		        				String dateNaissance = fieldDateNaissance.getText();
-			        		        				
-			        		        				boolean checkPrenom = fieldPrenom.getText().equals("");
-			        						        boolean checkNom = fieldNom.getText().equals("");
-			        						        boolean checkNS = fieldNumSecu.getText().equals("");
-			        						        boolean checkDN = fieldDateNaissance.getText().equals("AAAA-MM-JJ") || fieldDateNaissance.getText().equals("");
-			        						        
-			        						       
-			        						       
-			        						        if(checkPrenom || checkNom || checkNS || checkDN)
-			        								{
-			        						        	JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs !");
-			        									dispose();
-			        									//searchBarI.setText(null);
-			        									fieldPrenom.setText(null);
-			        						        	fieldNom.setText(null);
-			        						        	fieldNumSecu.setText(null);
-			        						        	fieldDateNaissance.setText("AAAA-MM-JJ");
-			        						        	fieldDateNaissance.setForeground(new Color(153, 153, 153));
-			        								}
-			        						        else if(prenom.matches(".*\\d.*") || nom.matches(".*\\d.*"))
-			        						        {
-			        						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des lettre pour les champs suivants :"+"\n"
-			        									        +"Pr"+"\u00e9"+"nom, Nom !");
-			        						        	dispose();
-			        						        	fieldPrenom.setText(null);
-			        						        	fieldNom.setText(null);
-			        						        	fieldNumSecu.setText(null);
-			        						        	fieldDateNaissance.setText("AAAA-MM-JJ");
-			        						        	fieldDateNaissance.setForeground(new Color(153, 153, 153));
-			        						        }
-			        						        else if(!(numSecu.matches("[0-9]+")))
-			        						        {
-			        						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
-			        									        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
-			        						        	dispose();
-			        						        	fieldPrenom.setText(null);
-			        						        	fieldNom.setText(null);
-			        						        	fieldNumSecu.setText(null);
-			        						        	fieldDateNaissance.setText("AAAA-MM-JJ");
-			        						        	fieldDateNaissance.setForeground(new Color(153, 153, 153));
-			        						        }
-			        						        else
-			        						        {
-			        						        	Patient nouvPatient = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
-			        						        	if(Patient.rechercherPatient(nouvPatient))
-			        						        	{
-			        						        		JOptionPane.showMessageDialog(null, "Erreur, ce patient existe");
-				        						        	dispose();
-				        						        	fieldPrenom.setText(null);
-				        						        	fieldNom.setText(null);
-				        						        	fieldNumSecu.setText(null);
-				        						        	fieldDateNaissance.setText("AAAA-MM-JJ");
-				        						        	fieldDateNaissance.setForeground(new Color(153, 153, 153));
-			        						        	}
-			        						        	else
-			        						        	{
-			        						        		try
-					        		        				{
-					        		        					Patient.ajouterPatient(nouvPatient);
-					        		        					fen.setVisible(false);
-						        		        				JOptionPane.showMessageDialog(null, "Nouveau patient ajout"+"\u00e9"+" !");
-						        		        				fen.dispose();
-					        		        				}
-					        		        				catch(IOException error)
-					        		        				{
-					        		        					
-					        		        				}
-			        						        	}
-			        						        }
+		        								String prenom = fieldPrenom.getText();
+		        		        				String nom = fieldNom.getText();
+		        		        				String numSecu = fieldNumSecu.getText();
+		        		        				String dateNaissance = fieldDateNaissance.getText();
+		        		        				
+		        		        				// test
+		        		        				//Integer.parseInt(numSecu); // une exception sera levé si le numero de securite social contient des lettres
+		        		        				
+		        		        				
+		        		        				
+		        		        				boolean checkPrenom = fieldPrenom.getText().equals("");
+		        						        boolean checkNom = fieldNom.getText().equals("");
+		        						        boolean checkNS = fieldNumSecu.getText().equals("");
+		        						        boolean checkDN = fieldDateNaissance.getText().equals("AAAA-MM-JJ") || fieldDateNaissance.getText().equals("");
+		        						        
+		        						        Pattern pattern = Pattern.compile("[^a-zA-Z0-9]");
+		        						        
+		        						        
+		        						        Matcher matcherNum = pattern.matcher(numSecu);
+		        						        
+		        						       
+		        						        boolean numInterdit = matcherNum.find();
+		        		        				
+		        						        if(checkPrenom || checkNom || checkNS || checkDN)
+		        								{
+		        						        	JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs !");
+		        									dispose();
+		        									//searchBarI.setText(null);
+		        									fieldPrenom.setText(null);
+		        						        	fieldNom.setText(null);
+		        						        	fieldNumSecu.setText(null);
+		        						        	fieldDateNaissance.setText("AAAA-MM-JJ");
+		        						        	fieldDateNaissance.setForeground(new Color(153, 153, 153));
 		        								}
-			        							catch(DateTimeParseException error)
-			        							{
-			        								JOptionPane.showMessageDialog(null, "Veuillez utilisez le format indiqu"+"\u00e9"+" : AAAA-MM-JJ !");
-			        								dateNaissance = "";
-			        								dispose();
-			        								fieldPrenom.setText(null);
-			        					        	fieldNom.setText(null);
-			        					        	fieldNumSecu.setText(null);
-			        					        	fieldDateNaissance.setText("AAAA-MM-JJ");
-			        					        	fieldDateNaissance.setForeground(new Color(153, 153, 153));
-			        							}
-			        							catch(NumberFormatException error)
-			        						    {
-			        						        JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
-			        							        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
-			        					        	dispose();
-			        					        	fieldPrenom.setText(null);
-			        					        	fieldNom.setText(null);
-			        					        	fieldNumSecu.setText(null);
-			        					        	fieldDateNaissance.setText("AAAA-MM-JJ");
-			        					        	fieldDateNaissance.setForeground(new Color(153, 153, 153));
-			        						    }
+		        						        else if(prenom.matches(".*\\d.*") /*|| prenom.matches("[^a-zA-Z]") */|| nom.matches(".*\\d.*") /*|| nom.matches("[^a-zA-Z]")*/)
+		        						        {
+		        						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des lettre pour les champs suivants :"+"\n"
+		        									        +"Pr"+"\u00e9"+"nom, Nom !");
+		        						        	dispose();
+		        						        	fieldPrenom.setText(null);
+		        						        	fieldNom.setText(null);
+		        						        	fieldNumSecu.setText(null);
+		        						        	fieldDateNaissance.setText("AAAA-MM-JJ");
+		        						        	fieldDateNaissance.setForeground(new Color(153, 153, 153));
+		        						        }
+		        						        else if(numInterdit)
+		        						        {
+		        						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
+		        									        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
+		        						        	dispose();
+		        						        	fieldPrenom.setText(null);
+		        						        	fieldNom.setText(null);
+		        						        	fieldNumSecu.setText(null);
+		        						        	fieldDateNaissance.setText("AAAA-MM-JJ");
+		        						        	fieldDateNaissance.setForeground(new Color(153, 153, 153));
+		        						        }
+		        						        else
+		        						        {
+		        						        	Patient nouvPatient = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
+			        		        				try
+			        		        				{
+			        		        					Patient.ajouterPatient(nouvPatient);
+			        		        				}
+			        		        				catch(IOException error)
+			        		        				{
+			        		        					
+			        		        				}
+			        		        				
+			        		        				fen.setVisible(false);
+			        		        				JOptionPane.showMessageDialog(null, "Nouveau patient ajout"+"\u00e9"+" !");
+			        		        				fen.dispose();
+		        						        }
+		        		        				
+		        							}
+		        							catch(DateTimeParseException error)
+		        								{
+		        									JOptionPane.showMessageDialog(null, "Veuillez utilisez le format indiqu"+"\u00e9"+" : AAAA-MM-JJ !");
+		        									dateNaissance = "";
+		        									dispose();
+		        									fieldPrenom.setText(null);
+		        						        	fieldNom.setText(null);
+		        						        	fieldNumSecu.setText(null);
+		        						        	fieldDateNaissance.setText("AAAA-MM-JJ");
+		        						        	fieldDateNaissance.setForeground(new Color(153, 153, 153));
+		        								}
+		        							catch(NumberFormatException error)
+		        						        {
+		        						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
+		        									        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
+		        						        	dispose();
+		        						        	fieldPrenom.setText(null);
+		        						        	fieldNom.setText(null);
+		        						        	fieldNumSecu.setText(null);
+		        						        	fieldDateNaissance.setText("AAAA-MM-JJ");
+		        						        	fieldDateNaissance.setForeground(new Color(153, 153, 153));
+		        						        }
 		        							}
 		        						}
-		        					);
+		        				);
 		        				
 		        				
 		        				
@@ -804,11 +825,6 @@ public class Interface extends JFrame implements ActionListener
 		        		        	nom = tablePatient.getModel().getValueAt(row, 1).toString();
 		        		        	numSecu = tablePatient.getModel().getValueAt(row, 2).toString();
 		        		        	dateNaissance = tablePatient.getModel().getValueAt(row, 3).toString();
-		        		        	
-		        		        	final String prenomInitial = prenom;
-    		        				final String nomInitial = nom;
-    		        				final String numSecuInitial = numSecu;
-    		        				final String dateNaissanceInitial = dateNaissance;
 		        		        
 		        				
 		        				JFrame fen = new JFrame();
@@ -962,133 +978,74 @@ public class Interface extends JFrame implements ActionListener
 		        						{
 		        							public void actionPerformed(ActionEvent e)
 		        							{
-		        								try
-		        								{
-		        									
-			        		        				
-			        		        				System.out.println(prenomInitial);
-			        		        				
-			        		        				
-			        		        				Patient search = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
-			        		        				
-			        		        				Patient[] listePatient = Patient.rechercherPatients(search);
-			        		        				
-			        		        				
-			        		        				try
-			        								{
-				        								
-				        		        				
-				        		        				boolean checkPrenom = fieldPrenom.getText().equals("");
-				        						        boolean checkNom = fieldNom.getText().equals("");
-				        						        boolean checkNS = fieldNumSecu.getText().equals("");
-				        						        boolean checkDN = fieldDateNaissance.getText().equals("AAAA-MM-JJ") || fieldDateNaissance.getText().equals("");
-				        						        
-				        						       
-				        						       
-				        						        if(checkPrenom || checkNom || checkNS || checkDN)
-				        								{
-				        						        	JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs !");
-				        									dispose();
-				        									fieldPrenom.setText(prenomInitial);
-				        						        	fieldNom.setText(nomInitial);
-				        						        	fieldNumSecu.setText(numSecuInitial);
-				        						        	fieldDateNaissance.setText(dateNaissanceInitial);
-				        								}
-				        						        else if(prenom.matches(".*\\d.*") || nom.matches(".*\\d.*"))
-				        						        {
-				        						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des lettre pour les champs suivants :"+"\n"
-				        									        +"Pr"+"\u00e9"+"nom, Nom !");
-				        						        	dispose();
-				        						        	fieldPrenom.setText(prenomInitial);
-				        						        	fieldNom.setText(nomInitial);
-				        						        	fieldNumSecu.setText(numSecuInitial);
-				        						        	fieldDateNaissance.setText(dateNaissanceInitial);
-				        						        }
-				        						        else if(!(numSecu.matches("[0-9]+")))
-				        						        {
-				        						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
-				        									        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
-				        						        	dispose();
-				        						        	fieldPrenom.setText(prenomInitial);
-				        						        	fieldNom.setText(nomInitial);
-				        						        	fieldNumSecu.setText(numSecuInitial);
-				        						        	fieldDateNaissance.setText(dateNaissanceInitial);
-				        						        }
-				        						        else
-				        						        {
-				        						        	listePatient[0].setPrenom(fieldPrenom.getText());
-					        		        				listePatient[0].setNom(fieldNom.getText());
-					        		        				listePatient[0].setSecu(fieldNumSecu.getText());
-					        		        				listePatient[0].setNaissance(LocalDate.parse(fieldDateNaissance.getText()));
-					        		        				
-					        		        				int idPatient = listePatient[0].getId();
-					        		        				prenom =  listePatient[0].getPrenom();
-					        		        				nom =listePatient[0].getNom();
-					        		        				numSecu =listePatient[0].getSecu();
-				        						        	
-				        						        	Patient patientModif = new Patient(idPatient, prenom, nom, numSecu, listePatient[0].getNaissance());
-					        		        				
-					        		        				Patient.supprimerPatient(listePatient[row]);
-					        		        				
-					        		        				Patient.ajouterPatient(patientModif);
-					        		        				
-					        		        				String[][] patients = new String[nbPatients][4];
-											        		
-											        		id = new int[nbPatients]; 
-													
-											        		for(int i = 0 ; i < nbPatients ; i++)
-											        		{	
-											        			id[i] = listePatient[i].getId();
-											        			patients[i][0] = listePatient[i].getPrenom();
-											        			patients[i][1] = listePatient[i].getNom();
-											        			patients[i][2] = listePatient[i].getSecu();
-																patients[i][3] = (listePatient[i].getNaissance()).toString();
-											        		}
-											        		
-											        		
-											        		
-											        		
-											        		tableModel = new DefaultTableModel(patients, header1);
-											        		tablePatient.setModel(tableModel);
-											        		
-												        	frame.add(panel);
-													        frame.setVisible(true);
-					        		        				
-					        		        				
-					        		        				fen.setVisible(false);
-					        		        				JOptionPane.showMessageDialog(null, "Patient modifi"+"\u00e9"+" !");
-					        		        				fen.dispose();
-				        						        	}
-			        									}
-					        						catch(DateTimeParseException error)
-					        						{
-					        							JOptionPane.showMessageDialog(null, "Veuillez utilisez le format indiqu"+"\u00e9"+" : AAAA-MM-JJ !");
-					        							dateNaissance = "";
-					        							dispose();
-					        							fieldPrenom.setText(prenomInitial);
-			        						        	fieldNom.setText(nomInitial);
-			        						        	fieldNumSecu.setText(numSecuInitial);
-			        						        	fieldDateNaissance.setText(dateNaissanceInitial);
-					        						}
-					       							catch(NumberFormatException error)
-					       						    {
-					       						        JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
-					       							        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
-					       					        	dispose();
-					       					        	fieldPrenom.setText(prenomInitial);
-			        						        	fieldNom.setText(nomInitial);
-			        						        	fieldNumSecu.setText(numSecuInitial);
-			        						        	fieldDateNaissance.setText(dateNaissanceInitial);
-				        						    }
-		        								}
-			        		        			catch(IOException error)
-			        		        			{
-		        							
-			        		       				}
 		        								
+		        		        				Patient search = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
+		        		        				
+		        		        				Patient[] listePatient = Patient.rechercherPatients(search);
+		        		        				
+		        		        				System.out.println(prenom+" "+nom+" "+numSecu+" "+dateNaissance);
+		        		        				
+		        		        				listePatient[0].setPrenom(fieldPrenom.getText());
+		        		        				listePatient[0].setNom(fieldNom.getText());
+		        		        				listePatient[0].setSecu(fieldNumSecu.getText());
+		        		        				listePatient[0].setNaissance(LocalDate.parse(fieldDateNaissance.getText()));
+		        		        				
+		        		        				int idPatient = listePatient[0].getId();
+		        		        				prenom =  listePatient[0].getPrenom();
+		        		        				nom =listePatient[0].getNom();
+		        		        				numSecu =listePatient[0].getSecu();
+		        		        				
+		        		        				
+		        		        				Patient patientModif = new Patient(idPatient, prenom, nom, numSecu, listePatient[0].getNaissance());
+		        		        				
+		        		        				try
+		    		        		        	{
+		        		        					Patient.supprimerPatient(listePatient[row]);
+		    		        		        		
+		    		        		        		System.out.println("ok1");
+		    		        		        	}
+		    		        		        	catch(IOException error)
+		    		        		        	{
+		    		        		        		
+		    		        		        	}
+		        		        				try
+		        		        				{
+		        		        					Patient.ajouterPatient(patientModif);
+		        		        				}
+		        		        				catch(IOException error)
+		        		        				{
+		        		        					
+		        		        				}
+		        		        				
+		        		        				String[][] patients = new String[nbPatients][4];
+								        		
+								        		id = new int[nbPatients]; 
+										
+								        		for(int i = 0 ; i < nbPatients ; i++)
+								        		{	
+								        			id[i] = listePatient[i].getId();
+								        			patients[i][0] = listePatient[i].getPrenom();
+								        			patients[i][1] = listePatient[i].getNom();
+								        			patients[i][2] = listePatient[i].getSecu();
+													patients[i][3] = (listePatient[i].getNaissance()).toString();
+								        		}
+								        		
+								        		
+								        		
+								        		
+								        		tableModel = new DefaultTableModel(patients, header1);
+								        		tablePatient.setModel(tableModel);
+								        		
+									        	frame.add(panel);
+										        frame.setVisible(true);
+		        		        				
+		        		        				
+		        		        				fen.setVisible(false);
+		        		        				JOptionPane.showMessageDialog(null, "Patient modifi"+"\u00e9"+" !");
+		        		        				fen.dispose();
 		        							}
 		        						}
-		        					);
+		        				);
 		        				
 		        				
 		        				
