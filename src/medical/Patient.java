@@ -224,5 +224,10 @@ public class Patient {
         this.date_naissance = date_naissance;
     }
 
+    public static int getNbPatients()
+    {
+        return patients.size();
+    }
+
     /*-------------------------------------------------------------------------------*/
 }
