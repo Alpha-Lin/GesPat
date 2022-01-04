@@ -1,6 +1,7 @@
 package medical;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,7 +35,7 @@ public class Consultation {
     {
         if(Files.exists(consultations_path))
         {
-            Files.readAllLines(consultations_path).forEach((String consultation) -> {
+            Files.readAllLines(consultations_path, StandardCharsets.ISO_8859_1).forEach((String consultation) -> {
                 String[] consultation_infos = consultation.split(";");
                 consultations.add(new Consultation(Integer.parseInt(consultation_infos[0]), consultation_infos[1], LocalDate.parse(consultation_infos[2]), consultation_infos[3], consultation_infos[4].split(",")));
             });
@@ -59,13 +60,16 @@ public class Consultation {
     public static void supprimerConsultation(Consultation c) throws IOException
     {
         int index = consultations.indexOf(c);
+        System.out.println(index);
         if(index != -1)
         {
             consultations.remove(index);
-            List<String> consultations_string = Files.readAllLines(consultations_path);
+            System.out.println(index);
+            List<String> consultations_string = Files.readAllLines(consultations_path,  StandardCharsets.ISO_8859_1);
             consultations_string.remove(index);
             Files.write(consultations_path, consultations_string);
-        }        
+        } 
+        
     }
     
     /*-------------- Recherche les patients en fonction d'un attribut --------------*/
@@ -110,7 +114,7 @@ public class Consultation {
     
 
     // Converti la liste des pathologies en un format récupérable par CSV
-    private static String pathologiesToString(String[] pathologies)
+    public static String pathologiesToString(String[] pathologies)
     {
         StringBuilder pathoString = new StringBuilder();  
 
@@ -142,7 +146,7 @@ public class Consultation {
         return date_consultation;
     }
 
-    public void setDateCultation(LocalDate date_consultation)
+    public void setDateConsultation(LocalDate date_consultation)
     {
         this.date_consultation = date_consultation;
     }
@@ -152,7 +156,7 @@ public class Consultation {
     	return appareil;
     }
     
-    public void setAppariel(String appareil)
+    public void setAppareil(String appareil)
     {
     	this.appareil = appareil;
     }

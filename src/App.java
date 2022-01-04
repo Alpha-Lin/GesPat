@@ -23,9 +23,9 @@ public class App
         
         Consultation.initialiserConsultation();
         
-        Consultation consult = new Consultation(6, "DrHouse", LocalDate.of(2021, 1, 5), "fauteuil roulant", patho);
+        Consultation consult = new Consultation(2, "DrHouse", LocalDate.of(2021, 1, 5), "fauteuil roulant", patho);
         
-        Consultation consultation = new Consultation(6, "DrHouse", LocalDate.of(2021, 5, 5), "fauteuil roulant", patho);
+        Consultation consultation = new Consultation(5, "DrHouse", LocalDate.of(2021, 5, 5), "fauteuil roulant", patho);
         
         //Consultation.ajouterConsultation(consultation);
         
