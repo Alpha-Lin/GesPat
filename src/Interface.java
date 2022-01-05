@@ -59,7 +59,7 @@ public class Interface extends JFrame implements ActionListener
     
     public String[] header1 = {"Pr"+"\u00e9"+"nom", "Nom", "Num. S"+"\u00e9"+"cu.", "Date de naissance"};
     
-    public String[] header2 = {"Nom patient", "Nom m"+"\u00e9"+"decin", "Date consultation", "Appareillage n"+"\u00e9"+"cessaire", "Octroy"+"\u00e9"+" ou non", "patho"};
+    public String[] header2 = {"Id patient", "Nom m"+"\u00e9"+"decin", "Date consultation", "Appareillage n"+"\u00e9"+"cessaire", "Octroy"+"\u00e9"+" ou non", "patho"};
     
     String[] header3 = {"Pr"+"\u00e9"+"nom", "Nom", "num", "date"};
     
@@ -436,8 +436,6 @@ public class Interface extends JFrame implements ActionListener
 										nbPatients = listePatient.length;
 										
 										String[][] patients = new String[nbPatients][4];
-
-										System.out.println(patients.length);
 																		
 										for(int i = 0 ; i < nbPatients ; i++)
 										{	
@@ -505,7 +503,6 @@ public class Interface extends JFrame implements ActionListener
 		        			{
 		        				Point p = e.getPoint();
 		        				row = tablePatient.rowAtPoint(p);
-		        				System.out.println(row);
 		        			}
 		        		}
 		        );
@@ -814,7 +811,6 @@ public class Interface extends JFrame implements ActionListener
 		        				boutonSupr.setEnabled(false);
 		        				if(row > -1)
 		        		        {
-		        					System.out.println("la ligne "+row);
 		        		        	prenom = tablePatient.getModel().getValueAt(row, 0).toString();
 		        		        	nom = tablePatient.getModel().getValueAt(row, 1).toString();
 		        		        	numSecu = tablePatient.getModel().getValueAt(row, 2).toString();
@@ -1158,7 +1154,6 @@ public class Interface extends JFrame implements ActionListener
 		        		        	try
 		        		        	{
 		        		        		Patient.supprimerPatient(listePatient[row]);
-		        		        		System.out.println("ok1");
 		        		        	}
 		        		        	catch(IOException error)
 		        		        	{
@@ -2294,11 +2289,6 @@ public class Interface extends JFrame implements ActionListener
     		        				
     		        				String[][] infos = new String[taille][1];
     		        				
-    		        				
-    		        				
-    		        				System.out.println(listeConsult[0].getPathologies()[0]);
-    		        				System.out.println(id[row]);
-    		        				
     		        				listeConsult[0].getPathologies();
     		        				
     		        				for(int i = 0 ; i < taille ; i++)
@@ -2339,9 +2329,9 @@ public class Interface extends JFrame implements ActionListener
 		        		        	dateNaissance = tablePatient.getModel().getValueAt(row, 3).toString();
 		        		        	
 		        		        	
-		        		        	Patient aSupprimer = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
-		        		        	
-		        		        	Patient[] listePatient = Patient.rechercherPatients(aSupprimer);
+		        		        	Patient aSupprimer = new Patient(nom, prenom, numSecu, null);//LocalDate.parse(dateNaissance));
+
+									Patient[] listePatient = Patient.rechercherPatients(aSupprimer);
 		        		        	
 		        		        	Consultation[] listeConsultation = Consultation.rechercherConsultations(listePatient[row].getId());
 		        		        	
@@ -2384,13 +2374,6 @@ public class Interface extends JFrame implements ActionListener
 		        		}
 		        	);
 		        
-		        
-		        
-		       
-		       
-		        
-		        
-		        
 		        frame.add(panel);
 		        frame.setVisible(true); 
 		        searchBarP.requestFocusInWindow();
@@ -2402,18 +2385,258 @@ public class Interface extends JFrame implements ActionListener
 			
 			case 3:            // Le technicien
 			{
-				GridBagConstraints gbc = new GridBagConstraints(); 
+		        JPanel panel = new JPanel(new GridBagLayout());
 		        
-		        this.setLayout(new GridBagLayout());  
+				frame.setTitle("GesPat-Technicien"); 
 		        
-		        setTitle("GesPat-Technicien"); 
+		        JLabel titre = new JLabel("Interface Technicien");
+		        
+		        titre.setFont(new Font("Arial", Font.BOLD, 40));
+		        
+		        //JTextField searchBarI = new JTextField(2);
+		        JTextField searchApp = new JTextField(2); // recherche par appareil
+		        
+		        JButton retour = new JButton("Menu Principal");
+		        
+		        JButton bouton = new JButton("Rechercher");
+		        		        
+		        JButton boutonModif = new JButton("Octroyer");
+		        
+		        tableModel = new DefaultTableModel(miniTab, header3);
+		        
+		        tableModelConsult = new DefaultTableModel(consultation, header2);
+		        
+		        tableConsultation = new JTable(tableModelConsult);
+		        
+		        boutonModif.setEnabled(false);
+		        
+		        //JLabel sousTitre0 = new JLabel("ID :");
+		        JLabel sousTitre1 = new JLabel("Appareil :");
+		        
+		        panel.setLayout(new GridBagLayout());
+		        
+		        GridBagConstraints gbc = new GridBagConstraints();
+		        
+		        gbc.fill = GridBagConstraints.HORIZONTAL;
+		        gbc.gridx = 0;
+		        gbc.gridy = 0;
+		        gbc.weightx = 1;
+		        gbc.weighty = 1;
+		        gbc.gridwidth = 5;
+		        
+		        gbc.anchor = GridBagConstraints.NORTH;
+		        
+		        titre.setHorizontalAlignment(JLabel.CENTER);
+		        
+		        panel.add(titre, gbc);
+		        
+		        
+		        gbc.gridwidth = 1; 
 		        
 		        
 		        
+		         
+		        // Sous titre appareil
+		        
+		        gbc.gridx = 0;
+		        gbc.gridy = 1;
+		        gbc.weightx = 1;
+		        gbc.insets = new Insets(0, 35, 0, 0);
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		        panel.add(sousTitre1, gbc);
+		        
+		        // Search Bar Appareil 
+		        
+		        gbc.fill = GridBagConstraints.HORIZONTAL;
+		        gbc.insets = new Insets(0, 30, 0, 30);
+		        gbc.gridx = 0;
+		        gbc.gridy = 2;
+		        gbc.weightx = 1;
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		       
+		        panel.add(searchApp, gbc);
+		        
+		        // bouton rechercher
+		        
+		        GridBagConstraints gbc2 = new GridBagConstraints();
+		        gbc2.gridx = 0;
+		        gbc2.gridy = 3;
+		        gbc2.weightx = 0;
+		        gbc2.gridwidth = 5;
+		        gbc2.anchor = GridBagConstraints.CENTER;
+		        
+		        panel.add(bouton, gbc2);
 		        
 		        
-		        setVisible(true);  
-		        setDefaultCloseOperation(EXIT_ON_CLOSE);
+		        // tableau consultations
+		        
+		        gbc.gridx = 0;
+		        gbc.gridy = 4;
+		        gbc.weightx = 1;
+		        gbc.gridwidth = 5;
+		        gbc.insets = new Insets(0, 0, 0, 0);
+		        gbc.anchor = GridBagConstraints.LINE_START;
+		        
+		        // bouton retour menu
+		        
+		        gbc2.gridx = 0;
+		        gbc2.gridy = 5;
+		        gbc2.weightx = 0;
+		        gbc2.gridwidth = 1;
+		        gbc2.insets = new Insets(0, 0, 10, 0);
+		        gbc2.anchor = GridBagConstraints.CENTER;
+		        
+		        panel.add(retour, gbc2);
+		        
+		        // bouton modification
+		        
+		        gbc2.gridx = 2;
+		        gbc2.gridy = 5;
+		        gbc2.weightx = 0;
+		        gbc2.gridwidth = 1;
+		        gbc2.insets = new Insets(0, 0, 10, 0);
+		        gbc2.anchor = GridBagConstraints.CENTER;
+		        
+		        panel.add(boutonModif, gbc2);
+		       
+		        retour.addActionListener(new ActionListener()
+	    		   {
+	    	   			public void actionPerformed(ActionEvent e)
+	    	   			{
+	    	   				frame.setVisible(false);
+	    	   				new Fenetre();
+	    	   			}
+	    		   }
+	    	);
+		        
+		        // Recherche les consultations
+		        bouton.addActionListener(new ActionListener()
+		        		{
+		        			@Override
+							public void actionPerformed(ActionEvent e) 
+							{
+								appareil = searchApp.getText();
+								
+								boolean checkApp = searchApp.getText().equals("");
+
+								if(checkApp)
+								{
+									JOptionPane.showMessageDialog(null, "Veuillez rentrer le nom de l'appareil !");
+									dispose();
+									searchApp.setText(null);
+								}
+								else if(appareil.matches(".*\\d.*"))
+								{
+									JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des lettre pour les champs suivants :"+"\n"
+											+"Pr"+"\u00e9"+"nom, Nom !");
+									dispose();
+									searchApp.setText(null);
+								}
+								else
+								{
+									Consultation[] listeConsultation = Consultation.rechercherConsultations(appareil);
+						
+									int nbConsultation = listeConsultation.length;
+									
+									if(nbConsultation > 0)
+									{
+										consultation = new String[nbConsultation][6];
+										
+										for(int i = 0 ; i < nbConsultation ; i++)
+										{
+											
+											consultation[i][0] = listeConsultation[i].getId() + "";
+											consultation[i][1] = listeConsultation[i].getMedecin();
+											consultation[i][2] = listeConsultation[i].getDateConsultation().toString();
+											consultation[i][3] = listeConsultation[i].getAppareil();
+											consultation[i][4] = listeConsultation[i].getOctroie();
+											consultation[i][5] = Consultation.pathologiesToString(listeConsultation[i].getPathologies());
+										}
+										
+										tableModelConsult = new DefaultTableModel(consultation, header2);
+										tableConsultation.setModel(tableModelConsult);
+										
+										tableConsultation.getColumnModel().getColumn(5).setMinWidth(0);
+										tableConsultation.getColumnModel().getColumn(5).setMaxWidth(0);
+										tableConsultation.getColumnModel().getColumn(5).setWidth(0);
+										
+										panel.add(new JScrollPane(tableConsultation), gbc);
+										frame.add(panel);
+										frame.setVisible(true);
+									}
+									else
+										JOptionPane.showMessageDialog(null, "Aucune consultation pour cette appareil !");
+									
+									frame.add(panel);
+									frame.setVisible(true);
+									
+									//searchBarI.setText(null);
+									searchApp.setText(null);
+								}
+							}
+		        		}
+		        
+		        	);
+		        
+		        
+		        
+		        tableConsultation = new JTable(consultation, header2);
+		        
+		        panel.add(new JScrollPane(tableConsultation), gbc);
+		        
+		        tableConsultation.getColumnModel().getColumn(5).setMinWidth(0);
+        		tableConsultation.getColumnModel().getColumn(5).setMaxWidth(0);
+        		tableConsultation.getColumnModel().getColumn(5).setWidth(0);
+		        
+		        
+		        tableConsultation.addMouseListener(new MouseAdapter()
+		        		{
+		        			public void mousePressed(MouseEvent e)
+		        			{
+		        				Point p = e.getPoint();
+		        				rowConsult = tableConsultation.rowAtPoint(p);
+		        			}
+		        		}
+		        );
+
+		        tableConsultation.addFocusListener(new FocusListener()
+		        		{
+		        			@Override
+		        			public void focusGained(FocusEvent e)
+		        			{
+		        				boutonModif.setEnabled(true);
+		        			}
+		        			
+		        			public void focusLost(FocusEvent e)
+		        			{
+		        				
+		        			}
+		        		});
+		        
+		        boutonModif.addActionListener(new ActionListener()
+		        		{
+		    
+		        			public void actionPerformed(ActionEvent e)
+		        			{
+		        				//change le string
+								Consultation modif_oct = Consultation.rechercherConsultationId(Integer.parseInt(tableConsultation.getModel().getValueAt(rowConsult, 0).toString()));//row 1 ou 0
+								try {
+									modif_oct.setOctroie("Octroye");
+								} catch (IOException e1) {}
+
+								tableConsultation.setValueAt("Octroye", rowConsult, 4);
+		        			}
+		        		
+		        		}
+		        		
+		        	);
+		        
+		        frame.add(panel);
+		        frame.setVisible(true); 
+		        searchApp.requestFocusInWindow();
+		        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+
 		        break;
 			}
 		}
