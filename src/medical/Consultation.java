@@ -72,11 +72,10 @@ public class Consultation {
     public static void supprimerConsultation(Consultation c) throws IOException
     {
         int index = consultations.indexOf(c);
-        System.out.println(index);
+
         if(index != -1)
         {
             consultations.remove(index);
-            System.out.println(index);
             List<String> consultations_string = Files.readAllLines(consultations_path,  StandardCharsets.ISO_8859_1);
             consultations_string.remove(index);
             Files.write(consultations_path, consultations_string);

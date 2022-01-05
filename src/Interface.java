@@ -436,8 +436,6 @@ public class Interface extends JFrame implements ActionListener
 										nbPatients = listePatient.length;
 										
 										String[][] patients = new String[nbPatients][4];
-
-										System.out.println(patients.length);
 																		
 										for(int i = 0 ; i < nbPatients ; i++)
 										{	
@@ -505,7 +503,6 @@ public class Interface extends JFrame implements ActionListener
 		        			{
 		        				Point p = e.getPoint();
 		        				row = tablePatient.rowAtPoint(p);
-		        				System.out.println(row);
 		        			}
 		        		}
 		        );
@@ -814,7 +811,6 @@ public class Interface extends JFrame implements ActionListener
 		        				boutonSupr.setEnabled(false);
 		        				if(row > -1)
 		        		        {
-		        					System.out.println("la ligne "+row);
 		        		        	prenom = tablePatient.getModel().getValueAt(row, 0).toString();
 		        		        	nom = tablePatient.getModel().getValueAt(row, 1).toString();
 		        		        	numSecu = tablePatient.getModel().getValueAt(row, 2).toString();
@@ -1158,7 +1154,6 @@ public class Interface extends JFrame implements ActionListener
 		        		        	try
 		        		        	{
 		        		        		Patient.supprimerPatient(listePatient[row]);
-		        		        		System.out.println("ok1");
 		        		        	}
 		        		        	catch(IOException error)
 		        		        	{
@@ -2293,11 +2288,6 @@ public class Interface extends JFrame implements ActionListener
     		        				String[] header = {"Pathologies du patient"};
     		        				
     		        				String[][] infos = new String[taille][1];
-    		        				
-    		        				
-    		        				
-    		        				System.out.println(listeConsult[0].getPathologies()[0]);
-    		        				System.out.println(id[row]);
     		        				
     		        				listeConsult[0].getPathologies();
     		        				
