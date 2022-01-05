@@ -118,7 +118,7 @@ public class Interface extends JFrame implements ActionListener
 		        //JTextField searchBarI = new JTextField(2);
 		        JTextField searchBarP = new JTextField(2); // recherche par prenom
 		        JTextField searchBarN = new JTextField(2); // recherche par nom
-		        JTextField searchBarNS = new JTextField(2); // recherche par numero de securité social
+		        JTextField searchBarNS = new JTextField(2); // recherche par numero de securitï¿½ social
 		        JTextField searchBarDN = new JTextField(0); // recherche par date de naissance
 		        
 		        JButton retour = new JButton("Menu principal");
@@ -274,7 +274,7 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        panel.add(searchBarN, gbc);
 		        
-		        // Search Bar Numero de securité social
+		        // Search Bar Numero de securitï¿½ social
 		        
 		        gbc.fill = GridBagConstraints.HORIZONTAL;
 		        gbc.insets = new Insets(0, 70, 0, 70);
@@ -394,9 +394,9 @@ public class Interface extends JFrame implements ActionListener
 							        
 							        
 							        
-							        if(checkPrenom || checkNom || checkNS || checkDN)
+							        if(checkPrenom && checkNom && checkNS && checkDN)
 									{
-							        	JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs !");
+							        	JOptionPane.showMessageDialog(null, "Veuillez remplir au moins un champ !");
 										dispose();
 										searchBarP.setText(null);
 							        	searchBarN.setText(null);
@@ -404,7 +404,7 @@ public class Interface extends JFrame implements ActionListener
 							        	searchBarDN.setText("AAAA-MM-JJ");
 							        	searchBarDN.setForeground(new Color(153, 153, 153));
 									}
-							        else if(prenom.matches(".*\\d.*") || nom.matches(".*\\d.*"))
+							        else if(!checkPrenom && (prenom.matches(".*\\d.*") || nom.matches(".*\\d.*")))
 							        {
 							        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des lettre pour les champs suivants :"+"\n"
 										        +"Pr"+"\u00e9"+"nom, Nom !");
@@ -415,7 +415,7 @@ public class Interface extends JFrame implements ActionListener
 							        	searchBarDN.setText("AAAA-MM-JJ");
 							        	searchBarDN.setForeground(new Color(153, 153, 153));
 							        }
-							        else if(!(numSecu.matches("[0-9]+")))
+							        else if(!checkNS && !(numSecu.matches("[0-9]+")))
 							        {
 							        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
 										        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
@@ -429,43 +429,30 @@ public class Interface extends JFrame implements ActionListener
 							        else
 							        {
 							        	
-							        	Patient search = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
+							        	Patient search = new Patient(nom, prenom, numSecu, dateNaissance.equals("AAAA-MM-JJ") ? null :  LocalDate.parse(dateNaissance));
 							        	
-							        	
-							        	
-							        	if(Patient.rechercherPatient(search))
-							        	{
-							        		
-							        		Patient[] listePatient = Patient.rechercherPatients(search);
-										
-							        		nbPatients = listePatient.length;
-							        		
-							        		String[][] patients = new String[nbPatients][5];
-							        		
-							        		id = new int[nbPatients]; 
+										Patient[] listePatient = Patient.rechercherPatients(search);
 									
-							        		for(int i = 0 ; i < nbPatients ; i++)
-							        		{	
-							        			id[i] = listePatient[i].getId();
-							        			patients[i][0] = listePatient[i].getNom();
-							        			patients[i][1] = listePatient[i].getPrenom();
-							        			patients[i][2] = listePatient[i].getSecu();
-												patients[i][3] = (listePatient[i].getNaissance()).toString();
-							        		}
-							        		
-							        		tableModel = new DefaultTableModel(patients, header1);
-							        		tablePatient.setModel(tableModel);
-							        		
-							        		
-								        	panel.add(new JScrollPane(tablePatient), gbc);
-								        	frame.add(panel);
-									        frame.setVisible(true);
-							        		
-							        	}
-							        	else
-							        	{
-							        		JOptionPane.showMessageDialog(null, "Patient inconnu, veuillez l'ajouter ou vérifier les paramètres entrée !");
-							        	}
+										nbPatients = listePatient.length;
+										
+										String[][] patients = new String[nbPatients][5];
+
+										System.out.println(patients.length);
+																		
+										for(int i = 0 ; i < nbPatients ; i++)
+										{	
+											patients[i][0] = listePatient[i].getNom();
+											patients[i][1] = listePatient[i].getPrenom();
+											patients[i][2] = listePatient[i].getSecu();
+											patients[i][3] = (listePatient[i].getNaissance()).toString();
+										}
+										
+										tableModel = new DefaultTableModel(patients, header1);
+										tablePatient.setModel(tableModel);
+										
+										panel.add(new JScrollPane(tablePatient), gbc);
+										frame.add(panel);
+										frame.setVisible(true);
 							        	
 							        	searchBarP.setText(null);
 							        	searchBarN.setText(null);
@@ -476,27 +463,27 @@ public class Interface extends JFrame implements ActionListener
 		        				
 								}
 								catch(DateTimeParseException error)
-									{
-										JOptionPane.showMessageDialog(null, "Veuillez utilisez le format indiqu"+"\u00e9"+" : AAAA-MM-JJ !");
-										dateNaissance = "";
-										dispose();
-										searchBarP.setText(null);
-							        	searchBarN.setText(null);
-							        	searchBarNS.setText(null);
-							        	searchBarDN.setText("AAAA-MM-JJ");
-							        	searchBarDN.setForeground(new Color(153, 153, 153));
-									}
+								{
+									JOptionPane.showMessageDialog(null, "Veuillez utilisez le format indiqu"+"\u00e9"+" : AAAA-MM-JJ !");
+									dateNaissance = "";
+									dispose();
+									searchBarP.setText(null);
+									searchBarN.setText(null);
+									searchBarNS.setText(null);
+									searchBarDN.setText("AAAA-MM-JJ");
+									searchBarDN.setForeground(new Color(153, 153, 153));
+								}
 								catch(NumberFormatException error)
-							        {
-							        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
-										        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
-							        	dispose();
-							        	searchBarP.setText(null);
-							        	searchBarN.setText(null);
-							        	searchBarNS.setText(null);
-							        	searchBarDN.setText("AAAA-MM-JJ");
-							        	searchBarDN.setForeground(new Color(153, 153, 153));
-							        }
+								{
+									JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
+											+"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
+									dispose();
+									searchBarP.setText(null);
+									searchBarN.setText(null);
+									searchBarNS.setText(null);
+									searchBarDN.setText("AAAA-MM-JJ");
+									searchBarDN.setForeground(new Color(153, 153, 153));
+								}
 		        				
 							}
 		        		}
@@ -1209,7 +1196,7 @@ public class Interface extends JFrame implements ActionListener
 		        break;
 			}
 			
-			case 2:             // Le médecin
+			case 2:             // Le mï¿½decin
 			{
 				JPanel panel = new JPanel(new GridBagLayout());
 		        
@@ -1222,7 +1209,7 @@ public class Interface extends JFrame implements ActionListener
 		        //JTextField searchBarI = new JTextField(2);
 		        JTextField searchBarP = new JTextField(2); // recherche par prenom
 		        JTextField searchBarN = new JTextField(2); // recherche par nom
-		        JTextField searchBarNS = new JTextField(2); // recherche par numero de securité social
+		        JTextField searchBarNS = new JTextField(2); // recherche par numero de securitï¿½ social
 		        JTextField searchBarDN = new JTextField(0); // recherche par date de naissance
 		        
 		        JButton retour = new JButton("Menu Principal");
@@ -1389,7 +1376,7 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        panel.add(searchBarN, gbc);
 		        
-		        // Search Bar Numero de securité social
+		        // Search Bar Numero de securitï¿½ social
 		        
 		        gbc.fill = GridBagConstraints.HORIZONTAL;
 		        gbc.insets = new Insets(0, 70, 0, 70);
@@ -1618,7 +1605,7 @@ public class Interface extends JFrame implements ActionListener
 							        	}
 							        	else
 							        	{
-							        		JOptionPane.showMessageDialog(null, "Patient inconnu, veuillez l'ajouter ou vérifier les paramètres entrée !");
+							        		JOptionPane.showMessageDialog(null, "Patient inconnu, veuillez l'ajouter ou vï¿½rifier les paramï¿½tres entrï¿½e !");
 							        	}
 							        	
 							        	
