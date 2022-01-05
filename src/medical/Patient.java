@@ -72,7 +72,7 @@ public class Patient {
     
     private static List<Patient> rechercherPatientNom(List<Patient> patients_prematch, String nom)
     {
-        if(nom == null)
+        if(nom.equals(""))
             return patients_prematch;
 
         List<Patient> patients_match = new ArrayList<>();
@@ -87,7 +87,7 @@ public class Patient {
 
     private static List<Patient> rechercherPatientPrenom(List<Patient> patients_prematch, String prenom)
     {
-        if(prenom == null)
+        if(prenom.equals(""))
             return patients_prematch;
 
         List<Patient> patients_match = new ArrayList<>();
@@ -102,7 +102,7 @@ public class Patient {
 
     private static List<Patient> rechercherPatientSecu(List<Patient> patients_prematch, String numero_secu)
     {
-        if(numero_secu == null)
+        if(numero_secu.equals(""))
             return patients_prematch;
 
         List<Patient> patients_match = new ArrayList<>();
