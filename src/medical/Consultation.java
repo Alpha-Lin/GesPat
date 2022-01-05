@@ -148,7 +148,7 @@ public class Consultation {
         return false;
     }
     
-    // Converti la liste des pathologies en un format rÃ©cupÃ©rable par CSV
+    // Converti la liste des pathologies en un format récupérable par CSV
     public static String pathologiesToString(String[] pathologies)
     {
         StringBuilder pathoString = new StringBuilder();  
