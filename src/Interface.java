@@ -118,7 +118,7 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        JTextField searchBarP = new JTextField(2); // recherche par prenom
 		        JTextField searchBarN = new JTextField(2); // recherche par nom
-		        JTextField searchBarNS = new JTextField(2); // recherche par numÃ©ro de sÃ©curitÃ© social
+		        JTextField searchBarNS = new JTextField(2); // recherche par numéro de sécurité social
 		        JTextField searchBarDN = new JTextField(0); // recherche par date de naissance
 		        
 		        JButton retour = new JButton("Menu principal"); 
@@ -131,9 +131,9 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        JButton boutonSupr = new JButton("Supprimmer");
 		        
-		        boutonModif.setEnabled(false); // on dÃ©sactive le bouton initialement
+		        boutonModif.setEnabled(false); // on désactive le bouton initialement
 		        
-		        boutonSupr.setEnabled(false); // on dÃ©sactive le bouton initialement
+		        boutonSupr.setEnabled(false); // on désactive le bouton initialement
 		        
 		        searchBarDN.setText("AAAA-MM-JJ");
 		        searchBarDN.setForeground(new Color(153, 153, 153));
@@ -142,7 +142,7 @@ public class Interface extends JFrame implements ActionListener
 		        searchBarDN.addFocusListener(new FocusListener() 
 		        		{
 		        			@Override
-		        			public void focusGained(FocusEvent e) // change le texte et la couleur du texte lorsque le formulaire est sÃ©lectionnÃ©
+		        			public void focusGained(FocusEvent e) // change le texte et la couleur du texte lorsque le formulaire est sélectionné
 		        			{
 		        				searchBarDN.setText(null);
 		        				searchBarDN.setForeground(new Color(0, 0, 0));
@@ -156,7 +156,7 @@ public class Interface extends JFrame implements ActionListener
 		        		}
 		        );
 		        
-		        // labels qui donne le nom des diffÃ©rent formulaire
+		        // labels qui donne le nom des différent formulaire
 		        
 		        JLabel sousTitre1 = new JLabel("Pr"+"\u00e9"+"nom :"); 
 		        JLabel sousTitre2 = new JLabel("Nom :");
@@ -337,7 +337,7 @@ public class Interface extends JFrame implements ActionListener
 		        panel.add(boutonSupr, gbc2);
 		        
 		       
-		       retour.addActionListener(new ActionListener() // dÃ¨s que le bouton retour est pressÃ©, on retourne au menu principal
+		       retour.addActionListener(new ActionListener() // dès que le bouton retour est pressé, on retourne au menu principal
 		    		   {
 		    	   			public void actionPerformed(ActionEvent e)
 		    	   			{
@@ -348,14 +348,14 @@ public class Interface extends JFrame implements ActionListener
 		    	);
 		        
 		        
-		        bouton.addActionListener(new ActionListener() // dÃ¨s que le bouton de recherche est pressÃ©...
+		        bouton.addActionListener(new ActionListener() // dès que le bouton de recherche est pressé...
 		        		{
 		        			@Override
 							public void actionPerformed(ActionEvent e) 
 							{
 		        				try
 								{
-		        					//... les variables suivantes prennent les valeurs des diffÃ©rents formulaires
+		        					//... les variables suivantes prennent les valeurs des différents formulaires
 		        					
 		        					prenom = searchBarP.getText();
 									nom = searchBarN.getText();
@@ -363,7 +363,7 @@ public class Interface extends JFrame implements ActionListener
 									dateNaissance = searchBarDN.getText();
 									
 									
-									// Variables boolÃ©ennes qui revoie vrai si les formulaires n'ont pas Ã©tÃ© remplie
+									// Variables booléennes qui revoie vrai si les formulaires n'ont pas été remplie
 							        boolean checkPrenom = searchBarP.getText().equals("");
 							        boolean checkNom = searchBarN.getText().equals("");
 							        boolean checkNS = searchBarNS.getText().equals("");
@@ -392,7 +392,7 @@ public class Interface extends JFrame implements ActionListener
 							        	searchBarDN.setText("AAAA-MM-JJ");
 							        	searchBarDN.setForeground(new Color(153, 153, 153));
 							        }
-							        else if(!(numSecu.matches("[0-9]+"))) // message d'erreur lorsque le numÃ©ro de sÃ©curitÃ© inscrit ne contient pas que des chiffres
+							        else if(!(numSecu.matches("[0-9]+"))) // message d'erreur lorsque le numéro de sécurité inscrit ne contient pas que des chiffres
 							        {
 							        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
 										        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
@@ -405,14 +405,14 @@ public class Interface extends JFrame implements ActionListener
 							        }
 							        else 
 							        {
-							        	// on crÃ©e un patient de test...
+							        	// on crée un patient de test...
 							        	
 							        	Patient search = new Patient(prenom, nom, numSecu, dateNaissance.equals("AAAA-MM-JJ") ? null :  LocalDate.parse(dateNaissance));
 							        	
-										if(Patient.rechercherPatient(search)) // on vÃ©rifie qu'un patient identique au patient test existe...
+										if(Patient.rechercherPatient(search)) // on vérifie qu'un patient identique au patient test existe...
 							        	{
 
-							        		Patient[] listePatient = Patient.rechercherPatients(search); // ...on insÃ¨re tous les patients identique au patient test dans un array...
+							        		Patient[] listePatient = Patient.rechercherPatients(search); // ...on insère tous les patients identique au patient test dans un array...
 
 							        		nbPatients = listePatient.length;
 
@@ -420,7 +420,7 @@ public class Interface extends JFrame implements ActionListener
 
 							        		id = new int[nbPatients]; 
 
-							        		for(int i = 0 ; i < nbPatients ; i++) // ... et on met toutes les informations de ces patients dans array Ã  deux dimensions...
+							        		for(int i = 0 ; i < nbPatients ; i++) // ... et on met toutes les informations de ces patients dans array à deux dimensions...
 							        		{	
 							        			id[i] = listePatient[i].getId();
 							        			patients[i][0] = listePatient[i].getNom();
@@ -440,7 +440,7 @@ public class Interface extends JFrame implements ActionListener
 							        	}
 							        	else // message d'erreur quand le patient n'existe pas
 							        	{
-							        		JOptionPane.showMessageDialog(null, "Patient inconnu, veuillez l'ajouter ou vÃ©rifier les paramÃ¨tres entrÃ©e !");
+							        		JOptionPane.showMessageDialog(null, "Patient inconnu, veuillez l'ajouter ou vérifier les paramètres entrée !");
 							        	}
 							        	
 							        	searchBarP.setText(null);
@@ -462,7 +462,7 @@ public class Interface extends JFrame implements ActionListener
 									searchBarDN.setText("AAAA-MM-JJ");
 									searchBarDN.setForeground(new Color(153, 153, 153));
 								}
-								catch(NumberFormatException error) // message d'erreur lorsque le formulaire du numÃ©ro de sÃ©curitÃ© social est mal rempli
+								catch(NumberFormatException error) // message d'erreur lorsque le formulaire du numéro de sécurité social est mal rempli
 								{
 									JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
 											+"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
@@ -485,7 +485,7 @@ public class Interface extends JFrame implements ActionListener
 		        panel.add(new JScrollPane(tablePatient), gbc);
 		        
 		        
-		        tablePatient.addMouseListener(new MouseAdapter() // permet de savoir quel ligne du tableau est pressÃ©
+		        tablePatient.addMouseListener(new MouseAdapter() // permet de savoir quel ligne du tableau est pressé
 		        		{
 		        			public void mousePressed(MouseEvent e)
 		        			{
@@ -495,7 +495,7 @@ public class Interface extends JFrame implements ActionListener
 		        		}
 		        );
 		        
-		        tablePatient.addFocusListener(new FocusListener() // active les bouton de modification et de suppression lorsqu'une ligne du tableau est sÃ©lectionnÃ©e
+		        tablePatient.addFocusListener(new FocusListener() // active les bouton de modification et de suppression lorsqu'une ligne du tableau est sélectionnée
 		        		{
 		        			@Override
 		        			public void focusGained(FocusEvent e)
@@ -514,7 +514,7 @@ public class Interface extends JFrame implements ActionListener
 		        		{
 		        			public void actionPerformed(ActionEvent e)
 		        			{
-		        				JFrame fen = new JFrame(); // crÃ©ation d'une nouvelle fenetre avec des formulaires
+		        				JFrame fen = new JFrame(); // création d'une nouvelle fenetre avec des formulaires
 		        				
 		        				fen.setLayout(new GridBagLayout());
 		        				
@@ -534,7 +534,7 @@ public class Interface extends JFrame implements ActionListener
 		        				
 		        				JTextField fieldNom = new JTextField(10); // champ nom du patient
 		        				
-		        				JTextField fieldNumSecu = new JTextField(10); // champ numÃ©ro de sÃ©curitÃ© social du patient
+		        				JTextField fieldNumSecu = new JTextField(10); // champ numéro de sécurité social du patient
 		        				
 		        				JTextField fieldDateNaissance = new JTextField(10); // champ date de naissance du patient
 		        				
@@ -582,7 +582,7 @@ public class Interface extends JFrame implements ActionListener
 		        				
 		        				fen.add(sousTitre2, gbc);
 		        				
-		        				// Contrainte de layout du sous titre 3 : numÃ©ro de sÃ©curitÃ© social
+		        				// Contrainte de layout du sous titre 3 : numéro de sécurité social
 		        				
 		        				gbc.anchor = GridBagConstraints.WEST;
 		        				gbc.gridx = 0;
@@ -630,7 +630,7 @@ public class Interface extends JFrame implements ActionListener
 		        				
 		        				fen.add(fieldNom, gbc);
 		        				
-		        				// Contrainte de layout du formulaire : numÃ©ro de sÃ©curitÃ© social
+		        				// Contrainte de layout du formulaire : numéro de sécurité social
 		        				
 		        				gbc.anchor = GridBagConstraints.EAST;
 		        				gbc.gridx = 2;
@@ -685,19 +685,19 @@ public class Interface extends JFrame implements ActionListener
 		        				);
 		        				
 		        				
-		        				validation.addActionListener(new ActionListener() // lorsque le bouton de validation est pressÃ©....
+		        				validation.addActionListener(new ActionListener() // lorsque le bouton de validation est pressé....
 		        						{
 		        							public void actionPerformed(ActionEvent e)
 		        							{
 		        								
-		        								try // le contenu des formulaires sont rÃ©cupÃ©rÃ©s
+		        								try // le contenu des formulaires sont récupérés
 		        								{
 			        								String prenom = fieldPrenom.getText();
 			        		        				String nom = fieldNom.getText();
 			        		        				String numSecu = fieldNumSecu.getText();
 			        		        				String dateNaissance = fieldDateNaissance.getText();
 			        		        				
-			        		        				// variable boolÃ©enne qui renvoie vrai si les formulaires sont vide
+			        		        				// variable booléenne qui renvoie vrai si les formulaires sont vide
 			        		        				
 			        		        				boolean checkPrenom = fieldPrenom.getText().equals("");
 			        						        boolean checkNom = fieldNom.getText().equals("");
@@ -728,7 +728,7 @@ public class Interface extends JFrame implements ActionListener
 			        						        	fieldDateNaissance.setText("AAAA-MM-JJ");
 			        						        	fieldDateNaissance.setForeground(new Color(153, 153, 153));
 			        						        }
-			        						        else if(!(numSecu.matches("[0-9]+"))) // message d'erreur lorsque le champ de numÃ©ro de sÃ©curitÃ© social contient autre chose que des chiffres
+			        						        else if(!(numSecu.matches("[0-9]+"))) // message d'erreur lorsque le champ de numéro de sécurité social contient autre chose que des chiffres
 			        						        {
 			        						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
 			        									        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
@@ -741,10 +741,10 @@ public class Interface extends JFrame implements ActionListener
 			        						        }
 			        						        else
 			        						        { 
-			        						        	// on crÃ©e un nouveau patient... 
+			        						        	// on crée un nouveau patient... 
 			        						        	Patient nouvPatient = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
 			        						        	
-			        						        	if(Patient.rechercherPatient(nouvPatient)) // ... si il existe dÃ©ja un message d'erreur apparaÃ®t
+			        						        	if(Patient.rechercherPatient(nouvPatient)) // ... si il existe déja un message d'erreur apparaît
 			        						        	{
 			        						        		JOptionPane.showMessageDialog(null, "Erreur, ce patient existe");
 				        						        	dispose();
@@ -756,7 +756,7 @@ public class Interface extends JFrame implements ActionListener
 			        						        	}
 			        						        	else
 			        						        	{
-			        						        		// si il n'existe pas le patient est ajoutÃ© et un message de confirmation apparaÃ®t
+			        						        		// si il n'existe pas le patient est ajouté et un message de confirmation apparaît
 			        						        		try
 					        		        				{
 					        		        					Patient.ajouterPatient(nouvPatient);
@@ -782,7 +782,7 @@ public class Interface extends JFrame implements ActionListener
 			        					        	fieldDateNaissance.setText("AAAA-MM-JJ");
 			        					        	fieldDateNaissance.setForeground(new Color(153, 153, 153));
 			        							}
-			        							catch(NumberFormatException error) // message d'erreur lorsque le champ du numÃ©ro de sÃ©curitÃ© est mal rempli
+			        							catch(NumberFormatException error) // message d'erreur lorsque le champ du numéro de sécurité est mal rempli
 			        						    {
 			        						        JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
 			        							        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
@@ -816,14 +816,14 @@ public class Interface extends JFrame implements ActionListener
 		        				boutonModif.setEnabled(false);
 		        				if(row > -1) 
 		        		        {
-		        					// on rÃ©cupÃ¨re les valeurs de la ligne sÃ©lÃ©ctionnÃ©e
+		        					// on récupère les valeurs de la ligne séléctionnée
 		        					
 		        		        	prenom = tablePatient.getModel().getValueAt(row, 0).toString();
 		        		        	nom = tablePatient.getModel().getValueAt(row, 1).toString();
 		        		        	numSecu = tablePatient.getModel().getValueAt(row, 2).toString();
 		        		        	dateNaissance = tablePatient.getModel().getValueAt(row, 3).toString();
 		        		        	
-		        		        	// on dÃ©finit des variables qui reprÃ©sente les valeurs intitiale qui reprÃ©sente le patient sÃ©lÃ©ctionnÃ©
+		        		        	// on définit des variables qui représente les valeurs intitiale qui représente le patient séléctionné
 		        		        	
 		        		        	final String prenomInitial = prenom;
     		        				final String nomInitial = nom;
@@ -831,7 +831,7 @@ public class Interface extends JFrame implements ActionListener
     		        				final String dateNaissanceInitial = dateNaissance;
 		        		        
 		        				
-		        				JFrame fen = new JFrame(); // on crÃ©e une nouvelle fenetre avec des formulaire
+		        				JFrame fen = new JFrame(); // on crée une nouvelle fenetre avec des formulaire
 		        				
 		        				fen.setLayout(new GridBagLayout());
 		        				
@@ -857,7 +857,7 @@ public class Interface extends JFrame implements ActionListener
 		        				
 		        				JTextField fieldNumSecu = new JTextField(10);
 		        				
-		        				fieldNumSecu.setText(numSecu); // on donne le numÃ©ro de sÃ©curitÃ© social initiale au formulaire
+		        				fieldNumSecu.setText(numSecu); // on donne le numéro de sécurité social initiale au formulaire
 		        				
 		        				JTextField fieldDateNaissance = new JTextField(10);
 		        				
@@ -905,7 +905,7 @@ public class Interface extends JFrame implements ActionListener
 		        				
 		        				fen.add(sousTitre2, gbc);
 		        				
-		        				// Contrainte de layout du sous titre 3 : numÃ©ro de sÃ©curitÃ© social
+		        				// Contrainte de layout du sous titre 3 : numéro de sécurité social
 		        				
 		        				gbc.anchor = GridBagConstraints.WEST;
 		        				gbc.gridx = 0;
@@ -953,7 +953,7 @@ public class Interface extends JFrame implements ActionListener
 		        				
 		        				fen.add(fieldNom, gbc);
 		        				
-		        				// Contrainte de layout du formulaire : numÃ©ro de sÃ©curitÃ© social
+		        				// Contrainte de layout du formulaire : numéro de sécurité social
 		        				
 		        				gbc.anchor = GridBagConstraints.EAST;
 		        				gbc.gridx = 2;
@@ -990,14 +990,14 @@ public class Interface extends JFrame implements ActionListener
 		        				
 		        				fen.add(validation, gbc);
 		        				
-		        				validation.addActionListener(new ActionListener() // lorsque le bouton de validation est pressÃ©...
+		        				validation.addActionListener(new ActionListener() // lorsque le bouton de validation est pressé...
 		        						{
 		        							public void actionPerformed(ActionEvent e)
 		        							{
 		        								try
 		        								{
 		        									
-			        		        				// On crÃ©e un patient de test
+			        		        				// On crée un patient de test
 			        		        				
 			        		        				Patient search = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
 			        		        				
@@ -1006,7 +1006,7 @@ public class Interface extends JFrame implements ActionListener
 			        		        				
 			        		        				try
 			        								{
-				        								// on dÃ©finit des variable boolÃ©enees qui renvoient lorsque leurs formulaires respectif est vide
+				        								// on définit des variable booléenees qui renvoient lorsque leurs formulaires respectif est vide
 				        		        				
 				        		        				boolean checkPrenom = fieldPrenom.getText().equals("");
 				        						        boolean checkNom = fieldNom.getText().equals("");
@@ -1024,7 +1024,7 @@ public class Interface extends JFrame implements ActionListener
 				        						        	fieldNumSecu.setText(numSecuInitial);
 				        						        	fieldDateNaissance.setText(dateNaissanceInitial);
 				        								}
-				        						        else if(prenom.matches(".*\\d.*") || nom.matches(".*\\d.*")) // message d'erreur lorsque les champs prenom et nom ont Ã©tÃ© rempli avec des chiffres et non des lettres
+				        						        else if(prenom.matches(".*\\d.*") || nom.matches(".*\\d.*")) // message d'erreur lorsque les champs prenom et nom ont été rempli avec des chiffres et non des lettres
 				        						        {
 				        						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des lettre pour les champs suivants :"+"\n"
 				        									        +"Pr"+"\u00e9"+"nom, Nom !");
@@ -1034,7 +1034,7 @@ public class Interface extends JFrame implements ActionListener
 				        						        	fieldNumSecu.setText(numSecuInitial);
 				        						        	fieldDateNaissance.setText(dateNaissanceInitial);
 				        						        }
-				        						        else if(!(numSecu.matches("[0-9]+"))) // message d'erreur lorsque le champ du numÃ©ro de sÃ©curitÃ© social est rempli avec autre chose que des chiffres
+				        						        else if(!(numSecu.matches("[0-9]+"))) // message d'erreur lorsque le champ du numéro de sécurité social est rempli avec autre chose que des chiffres
 				        						        {
 				        						        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
 				        									        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
@@ -1046,7 +1046,7 @@ public class Interface extends JFrame implements ActionListener
 				        						        }
 				        						        else
 				        						        {
-				        						        	// on modifie les valeurs du patient sÃ©lÃ©ctionnÃ© par les nouvelle valeur entrÃ©e avant validation
+				        						        	// on modifie les valeurs du patient séléctionné par les nouvelle valeur entrée avant validation
 				        						        	
 				        						        	listePatient[row].setPrenom(fieldPrenom.getText());
 					        		        				listePatient[row].setNom(fieldNom.getText());
@@ -1058,7 +1058,7 @@ public class Interface extends JFrame implements ActionListener
 					        		        				nom =listePatient[0].getNom();
 					        		        				numSecu =listePatient[0].getSecu();
 					        		        				
-					        		        				// pour valider la modification on crÃ©e un nouveau patient avec les valeurs entrÃ©e...
+					        		        				// pour valider la modification on crée un nouveau patient avec les valeurs entrée...
 				        						        	
 				        						        	Patient patientModif = new Patient(idPatient, prenom, nom, numSecu, listePatient[0].getNaissance());
 					        		        				
@@ -1066,11 +1066,11 @@ public class Interface extends JFrame implements ActionListener
 				        						        	
 					        		        				Patient.supprimerPatient(listePatient[row]);
 					        		        				
-					        		        				// et on en crÃ©e un nouveau qui sera Ã©crit dans le fichier patients.txt
+					        		        				// et on en crée un nouveau qui sera écrit dans le fichier patients.txt
 					        		        				
 					        		        				Patient.ajouterPatient(patientModif);
 					        		        				
-					        		        				// on met Ã  jour le tableau
+					        		        				// on met à jour le tableau
 					        		        				
 					        		        				String[][] patients = new String[nbPatients][4];
 											        		
@@ -1110,7 +1110,7 @@ public class Interface extends JFrame implements ActionListener
 			        						        	fieldNumSecu.setText(numSecuInitial);
 			        						        	fieldDateNaissance.setText(dateNaissanceInitial);
 					        						}
-					       							catch(NumberFormatException error) // message d'erreur lorsque le champ du numÃ©ro de sÃ©curitÃ© sociale est mal rempli
+					       							catch(NumberFormatException error) // message d'erreur lorsque le champ du numéro de sécurité sociale est mal rempli
 					       						    {
 					       						        JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
 					       							        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
@@ -1151,25 +1151,25 @@ public class Interface extends JFrame implements ActionListener
 		        			
 		        			public void actionPerformed(ActionEvent e) 
 		        			{
-		        				boutonSupr.setEnabled(false); // on dÃ©sactive le bouton aprÃ¨s activation
+		        				boutonSupr.setEnabled(false); // on désactive le bouton après activation
 		        				if(row > -1)
 		        		        {
-		        					// on rÃ©cupÃ¨re les valeurs du patient Ã  supprimer 
+		        					// on récupère les valeurs du patient à supprimer 
 		        					
 		        		        	prenom = tablePatient.getModel().getValueAt(row, 0).toString();
 		        		        	nom = tablePatient.getModel().getValueAt(row, 1).toString();
 		        		        	numSecu = tablePatient.getModel().getValueAt(row, 2).toString();
 		        		        	dateNaissance = tablePatient.getModel().getValueAt(row, 3).toString();
 		        		        	
-		        		        	// on crÃ©e un patient test
+		        		        	// on crée un patient test
 		        		        	
 		        		        	Patient aSupprimer = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
 		        		        	
-		        		        	// on rÃ©cupÃ¨re le patient identique au patient test
+		        		        	// on récupère le patient identique au patient test
 		        		        	
 		        		        	Patient[] listePatient = Patient.rechercherPatients(aSupprimer);
 		        		        	
-		        		        	// on supprime le patient de la ligne sÃ©lÃ©ctionnÃ©e
+		        		        	// on supprime le patient de la ligne séléctionnée
 		        		        	
 		        		        	try
 		        		        	{
@@ -1213,7 +1213,7 @@ public class Interface extends JFrame implements ActionListener
 		        break;
 			}
 			
-			case 2:             // L'interface du mÃ©decin
+			case 2:             // L'interface du médecin
 			{
 				JPanel panel = new JPanel(new GridBagLayout()); 
 		        
@@ -1225,7 +1225,7 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        JTextField searchBarP = new JTextField(2); // recherche par prenom
 		        JTextField searchBarN = new JTextField(2); // recherche par nom
-		        JTextField searchBarNS = new JTextField(2); // recherche par numero de securitÃ© sociale
+		        JTextField searchBarNS = new JTextField(2); // recherche par numero de securité sociale
 		        JTextField searchBarDN = new JTextField(0); // recherche par date de naissance
 		        
 		        JButton retour = new JButton("Menu Principal");
@@ -1241,19 +1241,19 @@ public class Interface extends JFrame implements ActionListener
 		        JButton boutonInfo = new JButton("Information..."); // bouton d'information des consultations, affiche les pathologies
 		        
 		        
-		        tableModel = new DefaultTableModel(miniTab, header3); // on dÃ©finit un model pour le petit tableau des patients
+		        tableModel = new DefaultTableModel(miniTab, header3); // on définit un model pour le petit tableau des patients
 		        
 		        tableModelConsult = new DefaultTableModel(consultation, header2); // et un autre model pour le grand tableau des consultations
 		        
 		        tablePatient = new JTable(tableModel);
 		        
-		        // on rend invisible la 3Ã©me colonne du tableau des patients
+		        // on rend invisible la 3éme colonne du tableau des patients
 		        
 		        tablePatient.getColumnModel().getColumn(2).setMinWidth(0);
         		tablePatient.getColumnModel().getColumn(2).setMaxWidth(0);
         		tablePatient.getColumnModel().getColumn(2).setWidth(0);
         		
-        		// on rend invisible la 4Ã©me colonne du tableau des patients
+        		// on rend invisible la 4éme colonne du tableau des patients
         		
         		tablePatient.getColumnModel().getColumn(3).setMinWidth(0);
         		tablePatient.getColumnModel().getColumn(3).setMaxWidth(0);
@@ -1265,7 +1265,7 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        tableConsultation = new JTable(tableModelConsult);
 		        
-		        // on dÃ©sactive les boutons d'ajout, de modification, d'information et de suppression des consultations
+		        // on désactive les boutons d'ajout, de modification, d'information et de suppression des consultations
 		        
 		        boutonAjout.setEnabled(false);
 		        
@@ -1346,7 +1346,7 @@ public class Interface extends JFrame implements ActionListener
 		        gbc.anchor = GridBagConstraints.LINE_START;        
 		        panel.add(sousTitre2, gbc);
 		        
-		        //Contrainte de layout du sous titre 3 : numÃ©ro de sÃ©curitÃ© sociale
+		        //Contrainte de layout du sous titre 3 : numéro de sécurité sociale
 		        gbc.gridx = 2;
 		        gbc.gridy = 1;
 		        gbc.weightx = 1;
@@ -1399,7 +1399,7 @@ public class Interface extends JFrame implements ActionListener
 		        
 		        panel.add(searchBarN, gbc);
 		        
-		        //Contrainte de layout du formulaire : numero de sÃ©curitÃ© social
+		        //Contrainte de layout du formulaire : numero de sécurité social
 		        
 		        gbc.fill = GridBagConstraints.HORIZONTAL;
 		        gbc.insets = new Insets(0, 70, 0, 70);
@@ -1531,14 +1531,14 @@ public class Interface extends JFrame implements ActionListener
 		        				
 		        				try
 		        				{
-		        					// rÃ©cupÃ¨re les informations insÃ©rÃ© dans les formulaires
+		        					// récupère les informations inséré dans les formulaires
 		        					
 									prenom = searchBarP.getText();
 									nom = searchBarN.getText();
 									numSecu = searchBarNS.getText();
 									dateNaissance = searchBarDN.getText();
 									
-									// on dÃ©finit des variables boolÃ©ennes qui renvoie true lorsque les formulaires sont vides
+									// on définit des variables booléennes qui renvoie true lorsque les formulaires sont vides
 							        boolean checkPrenom = searchBarP.getText().equals("");
 							        boolean checkNom = searchBarN.getText().equals("");
 							        boolean checkNS = searchBarNS.getText().equals("");
@@ -1565,7 +1565,7 @@ public class Interface extends JFrame implements ActionListener
 							        	searchBarDN.setText("AAAA-MM-JJ");
 							        	searchBarDN.setForeground(new Color(153, 153, 153));
 							        }
-							        else if(!(numSecu.matches("[0-9]+"))) // message d'erreur lorsque le champs numÃ©ro de sÃ©curitÃ© sociale contient autre chose des chiffres
+							        else if(!(numSecu.matches("[0-9]+"))) // message d'erreur lorsque le champs numéro de sécurité sociale contient autre chose des chiffres
 							        {
 							        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
 										        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
@@ -1578,7 +1578,7 @@ public class Interface extends JFrame implements ActionListener
 							        }
 							        else
 							        {
-							        	// crÃ©ation d'un patient test
+							        	// création d'un patient test
 							        
 							        	Patient search = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
 							        	
@@ -1586,13 +1586,13 @@ public class Interface extends JFrame implements ActionListener
 							        	
 							        	if(Patient.rechercherPatient(search))
 							        	{
-							        		// on rÃ©cupÃ¨re tous les patients identique au patient test
+							        		// on récupère tous les patients identique au patient test
 							        		
 							        		Patient[] listePatient = Patient.rechercherPatients(search);
 										
 							        		nbPatients = listePatient.length;
 							        		
-							        		// on met Ã  jour le tableau des patients
+							        		// on met à jour le tableau des patients
 							        		
 							        		String[][] patients = new String[nbPatients][4];
 							        		
@@ -1633,7 +1633,7 @@ public class Interface extends JFrame implements ActionListener
 							        	}
 							        	else // message d'erreur quand le patient rechercher n'existe pas
 							        	{
-							        		JOptionPane.showMessageDialog(null, "Patient inconnu, veuillez l'ajouter ou vÃ©rifier les paramÃ©tres entrÃ©e !");
+							        		JOptionPane.showMessageDialog(null, "Patient inconnu, veuillez l'ajouter ou vérifier les paramétres entrée !");
 							        	}
 							        	searchBarP.setText(null);
 							        	searchBarN.setText(null);
@@ -1673,7 +1673,7 @@ public class Interface extends JFrame implements ActionListener
         		tableConsultation.getColumnModel().getColumn(5).setMaxWidth(0);
         		tableConsultation.getColumnModel().getColumn(5).setWidth(0);
 		        
-		        tablePatient.addMouseListener(new MouseAdapter() // on rÃ©cupÃ¨re la ligne sÃ©lÃ©ctionnÃ©e dans le tableau des consultations
+		        tablePatient.addMouseListener(new MouseAdapter() // on récupère la ligne séléctionnée dans le tableau des consultations
         			{
         				public void mousePressed(MouseEvent e)
         				{
@@ -2764,7 +2764,7 @@ public class Interface extends JFrame implements ActionListener
 					
 				}
 				
-				//on dÃ©fini un tableau du nombre de patient par pathologie
+				//on défini un tableau du nombre de patient par pathologie
 				
 				miniTab = new String[pathologies.length][2]; 
 				
@@ -2778,7 +2778,7 @@ public class Interface extends JFrame implements ActionListener
 			
 				JTable voletStat1 = new JTable(miniTab, column);
 				
-				//on dÃ©fini un tableau du nombre de patient par appareils octroyÃ©
+				//on défini un tableau du nombre de patient par appareils octroyé
 				
 				miniTab = new String[appareillage.length][2];
 				
