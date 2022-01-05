@@ -24,6 +24,7 @@ public class Fenetre extends JFrame implements ActionListener
 	JButton bouton1 = new JButton("Agents d'administration");
     JButton bouton2 = new JButton("M"+"\u00e9"+"decin"); // unicode pour l'accent sur le e
     JButton bouton3 = new JButton("Technicien");
+    JButton bouton4 = new JButton("Statistiques");
 	
 	public Fenetre()
 	{
@@ -40,7 +41,7 @@ public class Fenetre extends JFrame implements ActionListener
         
         gbc.gridx = 0;  
         gbc.gridy = 0; 
-        gbc.gridwidth = 3;
+        gbc.gridwidth = 4;
         gbc.insets = new Insets(0, 50, 200, 50);
         
         JLabel titre = new JLabel("Logiciel de gestion des patients");
@@ -66,22 +67,20 @@ public class Fenetre extends JFrame implements ActionListener
         
         gbc.fill = GridBagConstraints.HORIZONTAL;
         
-        
-        
-        
-        
-        
         Dimension dimensionBouton = new Dimension(40, 40);
         
         bouton1.setBackground(Color.LIGHT_GRAY);
         bouton2.setBackground(Color.LIGHT_GRAY);
         bouton3.setBackground(Color.LIGHT_GRAY);
+        bouton4.setBackground(Color.LIGHT_GRAY);
         
         bouton1.setPreferredSize(dimensionBouton);
         
         bouton2.setPreferredSize(dimensionBouton);
         
         bouton3.setPreferredSize(dimensionBouton);
+        
+        bouton4.setPreferredSize(dimensionBouton);
         
         this.add(bouton1, gbc); 
         
@@ -111,13 +110,22 @@ public class Fenetre extends JFrame implements ActionListener
         
         this.add(bouton3, gbc);
         
+        //contrainte bouton 4
         
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 3;  
+        gbc.gridy = 1;  
+        gbc.weightx = 1;
+        gbc.insets = new Insets(0, 50, 0, 50);
+        
+        this.add(bouton4, gbc);
         
         // Action boutons
         
         bouton1.addActionListener(this);
         bouton2.addActionListener(this);
         bouton3.addActionListener(this);
+        bouton4.addActionListener(this);
         
         
         
@@ -151,13 +159,20 @@ public class Fenetre extends JFrame implements ActionListener
 			profession = 2;
 			new Interface(profession);
 		}
-		else
+		else if(e.getSource() == bouton3)
 		{
 			this.setVisible(false);
 			profession = 3;
 			new Interface(profession);
 			
 		}
+		else
+		{
+			this.setVisible(false);
+			profession = 4;
+			new Interface(profession);
+		}
+		
 		
 	}
 }

@@ -142,6 +142,13 @@ public class Patient {
 
         return patients_match.toArray(new Patient[patients_match.size()]);
     }
+    
+    public static Patient[] rechercherPatients(int id)
+    {
+        List<Patient> patients_match = rechercherPatientId(patients, id);
+
+        return patients_match.toArray(new Patient[patients_match.size()]);
+    }
 
     // Recherche si le patient est inscrit
     public static boolean rechercherPatient(Patient p_recherche)
