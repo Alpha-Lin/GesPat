@@ -435,14 +435,14 @@ public class Interface extends JFrame implements ActionListener
 									
 										nbPatients = listePatient.length;
 										
-										String[][] patients = new String[nbPatients][5];
+										String[][] patients = new String[nbPatients][4];
 
 										System.out.println(patients.length);
 																		
 										for(int i = 0 ; i < nbPatients ; i++)
 										{	
-											patients[i][0] = listePatient[i].getNom();
-											patients[i][1] = listePatient[i].getPrenom();
+											patients[i][0] = listePatient[i].getPrenom();
+											patients[i][1] = listePatient[i].getNom();
 											patients[i][2] = listePatient[i].getSecu();
 											patients[i][3] = (listePatient[i].getNaissance()).toString();
 										}
@@ -1516,17 +1516,14 @@ public class Interface extends JFrame implements ActionListener
 									numSecu = searchBarNS.getText();
 									dateNaissance = searchBarDN.getText();
 									
-									
-									
-							        //boolean checkId = searchBarI.getText().equals("");
 							        boolean checkPrenom = searchBarP.getText().equals("");
 							        boolean checkNom = searchBarN.getText().equals("");
 							        boolean checkNS = searchBarNS.getText().equals("");
 							        boolean checkDN = searchBarDN.getText().equals("AAAA-MM-JJ");
-							      
-							        if(checkPrenom || checkNom || checkNS || checkDN)
+
+							        if(checkPrenom && checkNom && checkNS && checkDN)
 									{
-							        	JOptionPane.showMessageDialog(null, "Veuillez remplir tous les champs !");
+							        	JOptionPane.showMessageDialog(null, "Veuillez remplir au moins champ !");
 										dispose();
 										searchBarP.setText(null);
 							        	searchBarN.setText(null);
@@ -1534,7 +1531,7 @@ public class Interface extends JFrame implements ActionListener
 							        	searchBarDN.setText("AAAA-MM-JJ");
 							        	searchBarDN.setForeground(new Color(153, 153, 153));
 									}
-							        else if(prenom.matches(".*\\d.*") || nom.matches(".*\\d.*"))
+							        else if((!checkPrenom && prenom.matches(".*\\d.*")) || (!checkNom && nom.matches(".*\\d.*")))
 							        {
 							        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des lettre pour les champs suivants :"+"\n"
 										        +"Pr"+"\u00e9"+"nom, Nom !");
@@ -1545,7 +1542,7 @@ public class Interface extends JFrame implements ActionListener
 							        	searchBarDN.setText("AAAA-MM-JJ");
 							        	searchBarDN.setForeground(new Color(153, 153, 153));
 							        }
-							        else if(!(numSecu.matches("[0-9]+")))
+							        else if(!checkNS && !(numSecu.matches("[0-9]+")))
 							        {
 							        	JOptionPane.showMessageDialog(null, "Veuillez n'utilisez que des chiffres pour le champ suivant :"+"\n"
 										        +"Num"+"\u00e9"+"ro de s"+"\u00e9"+"curit"+"\u00e9"+" sociale !");
@@ -1559,61 +1556,43 @@ public class Interface extends JFrame implements ActionListener
 							        else
 							        {
 							        
-							        	Patient search = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
-							        	
-							        	
-							        	
-							        	if(Patient.rechercherPatient(search))
-							        	{
+							        	Patient search = new Patient(nom, prenom, numSecu, dateNaissance.equals("AAAA-MM-JJ") ? null :  LocalDate.parse(dateNaissance));
 							        		
-							        		Patient[] listePatient = Patient.rechercherPatients(search);
-										
-							        		nbPatients = listePatient.length;
-							        		
-							        		String[][] patients = new String[nbPatients][4];
-							        		
-							        		id = new int[nbPatients]; 
+										Patient[] listePatient = Patient.rechercherPatients(search);
 									
-							        		for(int i = 0 ; i < nbPatients ; i++)
-							        		{	
-							        			id[i] = listePatient[i].getId();
-							        			patients[i][0] = listePatient[i].getNom();
-							        			patients[i][1] = listePatient[i].getPrenom();
-							        			patients[i][2] = listePatient[i].getSecu();
-							        			patients[i][3] = (listePatient[i].getNaissance()).toString();
-							        		}
-							        		
-							        		
-							        		tableModel = new DefaultTableModel(patients, header3);
-							        		
-							        		tablePatient.setModel(tableModel);
-							        		
-							        		tablePatient.getColumnModel().getColumn(2).setMinWidth(0);
-							        		tablePatient.getColumnModel().getColumn(2).setMaxWidth(0);
-							        		tablePatient.getColumnModel().getColumn(2).setWidth(0);
-							        		
-							        		tablePatient.getColumnModel().getColumn(3).setMinWidth(0);
-							        		tablePatient.getColumnModel().getColumn(3).setMaxWidth(0);
-							        		tablePatient.getColumnModel().getColumn(3).setWidth(0);
-							        		
-									        panneau.setViewportView(tablePatient);
-							        	
-							        		
-								        	frame.add(panel);
-									        frame.setVisible(true);
-							        		
-							        	}
-							        	else
-							        	{
-							        		JOptionPane.showMessageDialog(null, "Patient inconnu, veuillez l'ajouter ou v�rifier les param�tres entr�e !");
-							        	}
-							        	
+										nbPatients = listePatient.length;
+										
+										String[][] patients = new String[nbPatients][4];
+																		
+										for(int i = 0 ; i < nbPatients ; i++)
+										{	
+											patients[i][0] = listePatient[i].getPrenom();
+											patients[i][1] = listePatient[i].getNom();
+											patients[i][2] = listePatient[i].getSecu();
+											patients[i][3] = (listePatient[i].getNaissance()).toString();
+										}
+										
+										tableModel = new DefaultTableModel(patients, header3);
+										tablePatient.setModel(tableModel);
+										
+										tablePatient.getColumnModel().getColumn(2).setMinWidth(0);
+										tablePatient.getColumnModel().getColumn(2).setMaxWidth(0);
+										tablePatient.getColumnModel().getColumn(2).setWidth(0);
+										
+										tablePatient.getColumnModel().getColumn(3).setMinWidth(0);
+										tablePatient.getColumnModel().getColumn(3).setMaxWidth(0);
+										tablePatient.getColumnModel().getColumn(3).setWidth(0);
+										
+										panneau.setViewportView(tablePatient);
+										
+										frame.add(panel);
+										frame.setVisible(true);
 							        	
 							        	//searchBarI.setText(null);
 							        	searchBarP.setText(null);
 							        	searchBarN.setText(null);
 							        	searchBarNS.setText(null);
-							        	searchBarDN.setText(null);
+							        	searchBarDN.setText("AAAA-MM-JJ");
 							        	
 							        }
 						        
@@ -1659,7 +1638,7 @@ public class Interface extends JFrame implements ActionListener
         		        	numSecu = tablePatient.getModel().getValueAt(row, 2).toString();
         		        	dateNaissance = tablePatient.getModel().getValueAt(row, 3).toString();
         		        	
-        		        	Patient search = new Patient(prenom, nom, numSecu, LocalDate.parse(dateNaissance));
+        		        	Patient search = new Patient(nom, prenom, numSecu, LocalDate.parse(dateNaissance));
         		        	
         		        	Patient[] listePatient = Patient.rechercherPatients(search);
         		        	
