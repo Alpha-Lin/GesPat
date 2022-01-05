@@ -1,6 +1,7 @@
 package medical;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -189,8 +190,10 @@ public class Patient {
         return nom;
     }
 
-    public void setNom(String nom)
+    public void setNom(String nom) throws IOException
     {
+        setSomething(1, nom);
+
         this.nom = nom;
     }
 
@@ -199,8 +202,10 @@ public class Patient {
         return prenom;
     }
 
-    public void setPrenom(String prenom)
+    public void setPrenom(String prenom) throws IOException
     {
+        setSomething(2, prenom);
+
         this.prenom = prenom;
     }
 
@@ -209,8 +214,10 @@ public class Patient {
         return numero_secu;
     }
 
-    public void setSecu(String numero_secu)
+    public void setSecu(String numero_secu) throws IOException
     {
+        setSomething(3, numero_secu);
+
         this.numero_secu = numero_secu;
     }
 
@@ -219,14 +226,29 @@ public class Patient {
         return date_naissance;
     }
 
-    public void setNaissance(LocalDate date_naissance)
+    public void setNaissance(LocalDate date_naissance) throws IOException
     {
+        setSomething(4, date_naissance.toString());
+
         this.date_naissance = date_naissance;
     }
 
     public static int getNbPatients()
     {
         return patients.size();
+    }
+
+    private void setSomething(int v_index, String value) throws IOException
+    {
+        int index = patients.indexOf(this);
+
+        List<String> patients_string = Files.readAllLines(patients_path,  StandardCharsets.ISO_8859_1);
+        String[] modif = patients_string.get(index).split(";");
+
+        modif[v_index] = value;
+
+        patients_string.set(index, modif[0].concat(";").concat(modif[1]).concat(";").concat(modif[2]).concat(";").concat(modif[3]).concat(";").concat(modif[4]));
+        Files.write(patients_path, patients_string);
     }
 
     /*-------------------------------------------------------------------------------*/
